@@ -7,6 +7,8 @@ class GameWindow
     public clickedBlock: Point;
     public windowDimensions: Point;
     public blockClicked: boolean;
+    public static width: number;
+    public static height: number;
 
     constructor(width: number, height: number)
     {
@@ -15,6 +17,8 @@ class GameWindow
         this.canvas = <HTMLCanvasElement>document.getElementById("canvas");
         this.canvas.width = width;
         this.canvas.height = height;
+        GameWindow.width = width;
+        GameWindow.height = height;
         this.windowDimensions = new Point(this.canvas.width, this.canvas.height);
         this.canvas.style.background = "#eeeeee";
         this.context = this.canvas.getContext("2d");
@@ -39,10 +43,20 @@ class GameWindow
         this.hoveredBlock.y = gridPosition.y;
     }
 
-    public drawGridBox(x: number, y: number, color: string = "black")
+    public drawGridBox(x: number, y: number, color: string = "grey")
     {
         this.context.fillStyle = color;
-        this.context.fillRect(x * 100, y * 100, 100, 100);
+        this.context.fillRect((x * GameBoard.xInterval) + 1, (y * GameBoard.yInterval) + 1, GameBoard.xInterval - 2, GameBoard.yInterval - 2);
+    }
+
+    public drawGridCircle(x: number, y: number, color: string = "grey")
+    {
+        this.context.fillStyle = color;
+        this.context.beginPath();
+        const radius = Math.min(GameBoard.xInterval, GameBoard.yInterval) / 2 - 1;
+        this.context.arc((x * GameBoard.xInterval) + GameBoard.xInterval / 2, (y * GameBoard.yInterval) + GameBoard.yInterval / 2, radius, 0, 2 * Math.PI);
+        this.context.fill();
+        //this.context.fillRect((x * GameBoard.xInterval) + 1, (y * GameBoard.yInterval) + 1, GameBoard.xInterval - 2, GameBoard.yInterval - 2);
     }
 
     private getGridPosition(clientX: number, clientY: number): Point
@@ -50,8 +64,8 @@ class GameWindow
         const offset = this.canvas.getBoundingClientRect();
         const mouseX = clientX - offset.left;
         const mouseY = clientY - offset.top;
-        const xGridBlock = Math.floor(mouseX / 100);
-        const yGridBlock = Math.floor(mouseY / 100);
+        const xGridBlock = Math.floor(mouseX / GameBoard.xInterval);
+        const yGridBlock = Math.floor(mouseY / GameBoard.yInterval);
         return new Point(xGridBlock, yGridBlock);
     }
 
@@ -62,21 +76,6 @@ class GameWindow
         this.context.moveTo(x1, y1);
         this.context.lineTo(x2, y2);
         this.context.stroke();
-    }
-
-    public drawGrid(segments: number = 8): void
-    {
-        const xInterval = this.canvas.width / segments;
-        const yInterval = this.canvas.height / (segments / 2);
-        for (let i = 1; i < segments; i++)
-        {
-            this.drawLine(i * xInterval, 0, i * xInterval, this.canvas.height);
-        }
-
-        for (let i = 1; i < segments / 2; i++)
-        {
-            this.drawLine(0, i * yInterval, this.canvas.width, i * yInterval);
-        }
     }
 
     public clearScreen()

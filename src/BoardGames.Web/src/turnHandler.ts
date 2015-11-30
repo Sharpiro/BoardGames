@@ -1,31 +1,30 @@
 ﻿class TurnHandler
 {
-    private playerTurn: boolean;
+    public isPlayerTurn: boolean;
+    public static acceptingInput = true;
 
     constructor()
     {
-        this.playerTurn = true;
+        this.isPlayerTurn = true;
     }
 
     public update(): void
     {
-        this.playerTurn = !this.playerTurn;
-        if (this.playerTurn)
-            Game.acceptingInput = true;
-        else
+        if (Game.state === GameState.WaitingForUpdate)
         {
-            Game.acceptingInput = false;
-            setTimeout(() =>
-            {
-                alert("turn swap");
-                this.playerTurn = !this.playerTurn;
-                Game.acceptingInput = true;
-            }, 5000);
+            this.isPlayerTurn = !this.isPlayerTurn;
+            Game.state = GameState.AwaitingInput;
+            //if (this.isPlayerTurn)
+            //    Game.acceptingInput = true;
+            //else
+            //{
+            //    Game.acceptingInput = false;
+            //    setTimeout(() =>
+            //    {
+            //        this.isPlayerTurn = !this.isPlayerTurn;
+            //        Game.acceptingInput = true;
+            //    }, 2500);
+            //}
         }
-    }
-
-    public isPlayerTurn(): boolean
-    {
-        return this.playerTurn;
     }
 }
