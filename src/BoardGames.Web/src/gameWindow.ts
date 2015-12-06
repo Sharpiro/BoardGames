@@ -6,14 +6,12 @@ class GameWindow
     public hoveredBlock: Point;
     public clickedBlock: Point;
     public windowDimensions: Point;
-    public blockClicked: boolean;
     public static width: number;
     public static height: number;
 
-    constructor(width: number, height: number)
+    constructor(width: number, height: number, game: Game)
     {
         this.hoveredBlock = new Point(0, 0);
-        this.blockClicked = false;
         this.canvas = <HTMLCanvasElement>document.getElementById("canvas");
         this.canvas.width = width;
         this.canvas.height = height;
@@ -28,12 +26,14 @@ class GameWindow
 
     private onMouseDown = (e: MouseEvent): void =>
     {
-        var gridPosition = this.getGridPosition(e.clientX, e.clientY);
-        this.hoveredBlock.x = gridPosition.x;
-        this.hoveredBlock.y = gridPosition.y;
-        this.clickedBlock = new Point(this.hoveredBlock.x, this.hoveredBlock.y);
-        if (Game.acceptingInput)
-            this.blockClicked = true;
+        if (Game.state === GAME_STATE.AwaitingPlayerInput)
+        {
+            const gridPosition = this.getGridPosition(e.clientX, e.clientY);
+            this.hoveredBlock.x = gridPosition.x;
+            this.hoveredBlock.y = gridPosition.y;
+            this.clickedBlock = new Point(this.hoveredBlock.x, this.hoveredBlock.y);
+            Game.state = GAME_STATE.PlayerInputReceived;
+        }
     }
 
     private onMouseMove = (e: MouseEvent): void =>
@@ -54,7 +54,17 @@ class GameWindow
         this.context.fillStyle = color;
         this.context.beginPath();
         const radius = Math.min(GameBoard.xInterval, GameBoard.yInterval) / 2 - 1;
-        this.context.arc((x * GameBoard.xInterval) + GameBoard.xInterval / 2, (y * GameBoard.yInterval) + GameBoard.yInterval / 2, radius, 0, 2 * Math.PI);
+        this.context.arc(((x - 1) * GameBoard.xInterval) + GameBoard.xInterval / 2, ((y - 1) * GameBoard.yInterval) + GameBoard.yInterval / 2, radius, 0, 2 * Math.PI);
+        this.context.fill();
+        //this.context.fillRect((x * GameBoard.xInterval) + 1, (y * GameBoard.yInterval) + 1, GameBoard.xInterval - 2, GameBoard.yInterval - 2);
+    }
+
+    public drawGridCircleTop(x: number, y: number, color: string = "grey")
+    {
+        this.context.fillStyle = color;
+        this.context.beginPath();
+        const radius = Math.min(GameBoard.xInterval, GameBoard.yInterval) / 2 - 1;
+        this.context.arc(((x - 1) * GameBoard.xInterval) + GameBoard.xInterval / 2, ((1 - 1) * GameBoard.yInterval) + GameBoard.yInterval / 2, radius, 0, 2 * Math.PI);
         this.context.fill();
         //this.context.fillRect((x * GameBoard.xInterval) + 1, (y * GameBoard.yInterval) + 1, GameBoard.xInterval - 2, GameBoard.yInterval - 2);
     }
@@ -64,8 +74,8 @@ class GameWindow
         const offset = this.canvas.getBoundingClientRect();
         const mouseX = clientX - offset.left;
         const mouseY = clientY - offset.top;
-        const xGridBlock = Math.floor(mouseX / GameBoard.xInterval);
-        const yGridBlock = Math.floor(mouseY / GameBoard.yInterval);
+        const xGridBlock = Math.floor(mouseX / GameBoard.xInterval) + 1;
+        const yGridBlock = Math.floor(mouseY / GameBoard.yInterval) + 1;
         return new Point(xGridBlock, yGridBlock);
     }
 
