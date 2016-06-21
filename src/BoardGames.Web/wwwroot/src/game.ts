@@ -1,8 +1,4 @@
-﻿///<reference path="./gameWindow.ts"/>
-///<reference path="./InputHandler.ts"/>
-///<reference path="./gameBoard.ts"/>
-///<reference path="../lib/definitions/jquery/jquery.d.ts"/>
-abstract class Game
+﻿abstract class Game
 {
     protected gameWindow: GameWindow;
     protected frameId: number;
@@ -11,7 +7,6 @@ abstract class Game
     public static state: GAME_STATE;
     protected startTime: number;
     protected nowTime: number;
-    //connect4game
 
     constructor()
     {

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using System.IO;
 
 namespace BoardGames.Web
 {
@@ -8,16 +10,20 @@ namespace BoardGames.Web
     {
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddMvc();
         }
 
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseIISPlatformHandler();
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
+            app.UseFileServer();
+            app.UseCustomFileServer(env, "node_modules");
+            app.UseMvc(options => options.MapRoute("defaultApi", "api/{controller}/{action}/{id?}"));
         }
 
-        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+        public static void Main(string[] args)
+        {
+            new WebHostBuilder().UseKestrel().UseContentRoot(Directory.GetCurrentDirectory())
+                .UseIISIntegration().UseStartup<Startup>().Build().Run();
+        }
     }
 }

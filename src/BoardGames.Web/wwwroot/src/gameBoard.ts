@@ -1,5 +1,4 @@
-﻿///<reference path="./Square.ts"/>
-class GameBoard
+﻿class GameBoard
 {
     public static segmentsX: number;
     public static segmentsY: number;

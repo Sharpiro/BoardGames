@@ -1,6 +1,4 @@
-﻿///<reference path="../../game.ts"/>
-///<reference path="./C4Ai.ts"/>
-class ConnectFour extends Game
+﻿class ConnectFour extends Game
 {
     private computerAi: C4Ai;
 
