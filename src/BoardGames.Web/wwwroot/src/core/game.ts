@@ -1,18 +1,14 @@
 ﻿abstract class Game
 {
-    protected gameWindow: GameWindow;
     protected frameId: number;
     protected inputHandler: InputHandler;
-    protected gameBoard: GameBoard;
     public static state: GAME_STATE;
     protected startTime: number;
     protected nowTime: number;
 
-    constructor()
+    constructor(protected gameWindow: GameWindow, protected gameBoard: IGameBoard)
     {
-        this.gameWindow = new GameWindow(800, 750, this);
         this.inputHandler = new InputHandler();
-        this.gameBoard = new GameBoard(7, 6);
         Game.state = GAME_STATE.AwaitingPlayerInput;
     }
     protected render(): void
@@ -20,7 +16,7 @@
         this.gameWindow.clearScreen();
         this.gameBoard.render(this.gameWindow);
         if (Game.state === GAME_STATE.AwaitingPlayerInput)
-            this.gameWindow.drawGridCircleTop(this.gameWindow.hoveredBlock.x, this.gameWindow.hoveredBlock.y);
+            this.gameBoard.drawSkinnyGridBox(this.gameBoard.hoveredSquare.gridPosition.x, this.gameBoard.hoveredSquare.gridPosition.y);
     }
 
     protected updateView()
