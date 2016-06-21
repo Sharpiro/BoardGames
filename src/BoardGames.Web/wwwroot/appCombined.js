@@ -1,3 +1,8 @@
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var Point = (function () {
     function Point(x, y) {
         this.x = x;
@@ -10,8 +15,7 @@ var Point = (function () {
         return false;
     };
     return Point;
-})();
-///<reference path="./point.ts"/>
+}());
 var GameWindow = (function () {
     function GameWindow(width, height, game) {
         var _this = this;
@@ -81,14 +85,34 @@ var GameWindow = (function () {
         this.context.clearRect(0, 0, this.windowDimensions.x, this.windowDimensions.y);
     };
     return GameWindow;
-})();
-var InputHandler = (function () {
-    function InputHandler() {
+}());
+var Game = (function () {
+    function Game() {
+        this.gameWindow = new GameWindow(800, 750, this);
+        this.inputHandler = new InputHandler();
+        this.gameBoard = new GameBoard(7, 6);
+        Game.state = GAME_STATE.AwaitingPlayerInput;
     }
-    InputHandler.prototype.update = function (clickedBlocks) {
+    Game.prototype.render = function () {
+        this.gameWindow.clearScreen();
+        this.gameBoard.render(this.gameWindow);
+        if (Game.state === GAME_STATE.AwaitingPlayerInput)
+            this.gameWindow.drawGridCircleTop(this.gameWindow.hoveredBlock.x, this.gameWindow.hoveredBlock.y);
     };
-    return InputHandler;
-})();
+    Game.prototype.updateView = function () {
+        $("#playerTurn").text(Game.state);
+    };
+    return Game;
+}());
+var GAME_STATE;
+(function (GAME_STATE) {
+    GAME_STATE[GAME_STATE["AwaitingPlayerInput"] = 0] = "AwaitingPlayerInput";
+    GAME_STATE[GAME_STATE["PlayerInputReceived"] = 1] = "PlayerInputReceived";
+    GAME_STATE[GAME_STATE["AwaitingPlayerUpdate"] = 2] = "AwaitingPlayerUpdate";
+    GAME_STATE[GAME_STATE["AiTurn"] = 3] = "AiTurn";
+    GAME_STATE[GAME_STATE["GameOver"] = 4] = "GameOver";
+    GAME_STATE[GAME_STATE["Replay"] = 5] = "Replay";
+})(GAME_STATE || (GAME_STATE = {}));
 var Square = (function () {
     function Square(gridPosition, owner) {
         this.gridPosition = gridPosition;
@@ -104,14 +128,13 @@ var Square = (function () {
         return squareString;
     };
     return Square;
-})();
+}());
 var OWNER;
 (function (OWNER) {
     OWNER[OWNER["Empty"] = 0] = "Empty";
     OWNER[OWNER["Player"] = 1] = "Player";
     OWNER[OWNER["Computer"] = 2] = "Computer";
 })(OWNER || (OWNER = {}));
-///<reference path="./Square.ts"/>
 var GameBoard = (function () {
     function GameBoard(segmentsX, segmentsY) {
         this.playerBlocks = [];
@@ -241,44 +264,14 @@ var GameBoard = (function () {
         console.log(JSON.stringify(this.activationOrder));
     };
     return GameBoard;
-})();
-///<reference path="./gameWindow.ts"/>
-///<reference path="./InputHandler.ts"/>
-///<reference path="./gameBoard.ts"/>
-///<reference path="../lib/definitions/jquery/jquery.d.ts"/>
-var Game = (function () {
-    function Game() {
-        this.gameWindow = new GameWindow(800, 750, this);
-        this.inputHandler = new InputHandler();
-        this.gameBoard = new GameBoard(7, 6);
-        Game.state = GAME_STATE.AwaitingPlayerInput;
+}());
+var InputHandler = (function () {
+    function InputHandler() {
     }
-    Game.prototype.render = function () {
-        this.gameWindow.clearScreen();
-        this.gameBoard.render(this.gameWindow);
-        if (Game.state === GAME_STATE.AwaitingPlayerInput)
-            this.gameWindow.drawGridCircleTop(this.gameWindow.hoveredBlock.x, this.gameWindow.hoveredBlock.y);
+    InputHandler.prototype.update = function (clickedBlocks) {
     };
-    Game.prototype.updateView = function () {
-        $("#playerTurn").text(Game.state);
-    };
-    return Game;
-})();
-var GAME_STATE;
-(function (GAME_STATE) {
-    GAME_STATE[GAME_STATE["AwaitingPlayerInput"] = 0] = "AwaitingPlayerInput";
-    GAME_STATE[GAME_STATE["PlayerInputReceived"] = 1] = "PlayerInputReceived";
-    GAME_STATE[GAME_STATE["AwaitingPlayerUpdate"] = 2] = "AwaitingPlayerUpdate";
-    GAME_STATE[GAME_STATE["AiTurn"] = 3] = "AiTurn";
-    GAME_STATE[GAME_STATE["GameOver"] = 4] = "GameOver";
-    GAME_STATE[GAME_STATE["Replay"] = 5] = "Replay";
-})(GAME_STATE || (GAME_STATE = {}));
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-///<reference path="../game.ts"/>
+    return InputHandler;
+}());
 var BoardNav = (function (_super) {
     __extends(BoardNav, _super);
     function BoardNav() {
@@ -374,7 +367,7 @@ var BoardNav = (function (_super) {
         return false;
     };
     return BoardNav;
-})(Game);
+}(Game));
 var C4Ai = (function () {
     function C4Ai() {
     }
@@ -503,9 +496,7 @@ var C4Ai = (function () {
         return false;
     };
     return C4Ai;
-})();
-///<reference path="../../game.ts"/>
-///<reference path="./C4Ai.ts"/>
+}());
 var ConnectFour = (function (_super) {
     __extends(ConnectFour, _super);
     function ConnectFour() {
@@ -646,6 +637,6 @@ var ConnectFour = (function (_super) {
         return false;
     };
     return ConnectFour;
-})(Game);
+}(Game));
 var game = new ConnectFour();
 //# sourceMappingURL=appCombined.js.map

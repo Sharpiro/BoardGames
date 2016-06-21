@@ -1,5 +1,4 @@
-﻿///<reference path="./point.ts"/>
-class GameWindow
+﻿class GameWindow
 {
     private canvas: HTMLCanvasElement;
     public context: CanvasRenderingContext2D;

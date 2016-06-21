@@ -1,5 +1,4 @@
-﻿///<reference path="../game.ts"/>
-class BoardNav extends Game
+﻿class BoardNav extends Game
 {
     private index = 1;
     private diagonalIndex = 0;
