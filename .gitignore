@@ -3,6 +3,8 @@
 
 #customs
 *typings
+*appCombined.*
+*.map
 
 # User-specific files
 *.suo
