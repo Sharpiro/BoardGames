@@ -12,8 +12,10 @@ class LogicGates extends Game
     protected tick = (time: number = null): void =>
     {
         super.render();
-        var square = new PowerSquare(1, 1, this.gameBoard.xInterval, this.gameBoard.yInterval);
-        square.render(this.gameWindow);
+        var powerSquare = new PowerSquare(1, 1);
+        var booleanSquare = new BooleanSquare(5, 1);
+        powerSquare.render(this.gameBoard);
+        booleanSquare.render(this.gameBoard);
         this.updateInput();
         this.frameId = requestAnimationFrame(this.tick);
     }

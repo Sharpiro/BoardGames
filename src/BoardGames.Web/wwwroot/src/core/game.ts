@@ -16,7 +16,7 @@
         this.gameWindow.clearScreen();
         this.gameBoard.render(this.gameWindow);
         if (Game.state === GAME_STATE.AwaitingPlayerInput)
-            this.gameBoard.drawSkinnyGridBox(this.gameBoard.hoveredSquare.gridPosition.x, this.gameBoard.hoveredSquare.gridPosition.y);
+            this.gameBoard.drawSkinnyGridBox(this.gameBoard.hoveredSquare.GridX, this.gameBoard.hoveredSquare.GridY);
     }
 
     protected updateView()

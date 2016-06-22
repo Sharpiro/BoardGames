@@ -1,43 +1,58 @@
 ﻿/// <reference path="./logicSquare"/>
 
-class BooleanSquare extends LogicSquare
-{
-    private _isActive = false;
 
-    constructor(x = 0, y = 0, width = 0, height = 0, public isActive = false)
+class EmptySquare extends LogicSquare
+{
+    constructor(gridX: number, gridY: number)
     {
-        super(x, y, width, height, LogicSquareType.Boolean);
+        super(gridX, gridY, LogicSquareType.Empty);
     }
 
-    public render(gameWindow: GameWindow): void
+    public render(gameBoard: IGameBoard): void
     {
-        super.render(gameWindow);
+        //draw nothing
+    }
+}
+
+
+class BooleanSquare extends LogicSquare
+{
+    constructor(gridX: number, gridY: number, isActive = false)
+    {
+        super(gridX, gridY, LogicSquareType.Boolean, isActive);
+    }
+
+    public render(gameBoard: IGameBoard): void
+    {
+        if (this.isActive)
+            gameBoard.drawGridBox(this.GridX, this.GridY, "yellow");
+        else
+            gameBoard.drawGridBox(this.GridX, this.GridY, "white");
     }
 }
 
 class PowerSquare extends LogicSquare
 {
-
-    constructor(x = 0, y = 0, width = 0, height = 0)
+    constructor(gridX: number, gridY: number, isActive = false)
     {
-        super(x, y, width, height, LogicSquareType.Power);
+        super(gridX, gridY, LogicSquareType.Power, isActive);
     }
 
-    public render(gameWindow: GameWindow): void
+    public render(gameBoard: IGameBoard): void
     {
-        super.render(gameWindow, true, "red");
+        gameBoard.drawGridBox(this.GridX, this.GridY, "red");
     }
 }
 
 class PipeSquare extends LogicSquare
 {
-    constructor(x = 0, y = 0, width = 0, height = 0)
+    constructor(gridX: number, gridY: number, isActive = false)
     {
-        super(x, y, width, height, LogicSquareType.Power);
+        super(gridX, gridY, LogicSquareType.Pipe, isActive);
     }
 
-    public render(gameWindow: GameWindow): void
+    public render(gameBoard: IGameBoard): void
     {
-        super.render(gameWindow);
+        gameBoard.drawSkinnyGridBox(this.GridX, this.GridY);
     }
 }

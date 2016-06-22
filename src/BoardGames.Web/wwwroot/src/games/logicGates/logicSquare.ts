@@ -1,14 +1,16 @@
-﻿class LogicSquare extends GenericSquare
-{
-    constructor(x: number, y: number, width: number, height: number, public State: LogicSquareType)
-    {
-        super(x, y, width, height);
-    }
+﻿/// <reference path="../../core/boardSquare"/>
 
-    //public render(gameWindow: GameWindow): void
-    //{
-    //    super.render(gameWindow);
-    //}
+abstract class LogicSquare extends BoardSquare
+{
+    public type: LogicSquareType
+    public isActive = false;
+
+    constructor(gridX: number, gridY: number, type = LogicSquareType.Empty, isActive = false)
+    {
+        super(gridX, gridY);
+        this.type = type;
+        this.isActive = isActive;
+    }
 }
 
-enum LogicSquareType { Power, Boolean, Pipe }
+enum LogicSquareType { Empty, Power, Boolean, Pipe }
