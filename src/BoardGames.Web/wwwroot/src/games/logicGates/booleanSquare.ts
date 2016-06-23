@@ -1,6 +1,5 @@
 ﻿/// <reference path="./logicSquare"/>
 
-
 class EmptySquare extends LogicSquare
 {
     constructor(gridX: number, gridY: number)
@@ -14,7 +13,6 @@ class EmptySquare extends LogicSquare
     }
 }
 
-
 class BooleanSquare extends LogicSquare
 {
     constructor(gridX: number, gridY: number, isActive = false)
@@ -24,7 +22,7 @@ class BooleanSquare extends LogicSquare
 
     public render(gameBoard: IGameBoard): void
     {
-        if (this.isActive)
+        if (this.isActive())
             gameBoard.drawGridBox(this.GridX, this.GridY, "yellow");
         else
             gameBoard.drawGridBox(this.GridX, this.GridY, "white");
@@ -33,7 +31,7 @@ class BooleanSquare extends LogicSquare
 
 class PowerSquare extends LogicSquare
 {
-    constructor(gridX: number, gridY: number, isActive = false)
+    constructor(gridX: number, gridY: number, isActive = true)
     {
         super(gridX, gridY, LogicSquareType.Power, isActive);
     }

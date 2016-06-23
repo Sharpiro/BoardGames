@@ -9,12 +9,23 @@
     hoveredSquare: BoardSquare;
     clickedSquare: BoardSquare;
 
-    activateSquare(square: BoardSquare): void;
     drawSkinnyGridBox(x: number, y: number, color?: string, isFillable?: boolean): void;
     drawGridBox(x: number, y: number, color?: string, isFillable?: boolean): void
     drawGridCircle(x: number, y: number, color?: string): void
     drawGridCircleTop(x: number, y: number, color?: string): void
     getSquares(): BoardSquare[];
     getSquare(arrayPos: number): BoardSquare
-    render(gameWindow: GameWindow): void;
+    render(): void;
+    setSquare(square: BoardSquare): void;
 }
+
+//interface ILogicBoard implements IGameBoard
+//{
+//    squares: LogicSquare[];
+//    activationOrder: LogicSquare[];
+//    hoveredSquare: LogicSquare;
+//    clickedSquare: LogicSquare;
+//    getSquares(): LogicSquare[];
+//    getSquare(arrayPos: number): LogicSquare
+//    setSquare(square: LogicSquare): void;
+//}

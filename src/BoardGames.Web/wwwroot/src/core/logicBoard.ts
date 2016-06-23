@@ -17,8 +17,9 @@ class LogicBoard implements IGameBoard
         this.segmentsY = segmentsY;
         this.xInterval = _gameWindow.width / segmentsX;
         this.yInterval = _gameWindow.height / segmentsY;
-        this._gameWindow.canvas.addEventListener("mousemove", this.onMouseMove, false);
-        this._gameWindow.canvas.addEventListener("mousedown", this.onMouseDown, false);
+        this._gameWindow.registerEvent("mousemove", this.onMouseMove);
+        this._gameWindow.registerEvent("mousedown", this.onMouseDown);
+        this._gameWindow.registerEvent("contextmenu", (e: MouseEvent) => e.preventDefault());
         this.hoveredSquare = new PipeSquare(0, 0);
         for (let i = 0; i < segmentsY; i++) 
         {
@@ -37,12 +38,11 @@ class LogicBoard implements IGameBoard
             this.hoveredSquare.GridX = gridPosition.x;
             this.hoveredSquare.GridY = gridPosition.y;
             var point = new Point(this.hoveredSquare.GridX, this.hoveredSquare.GridY);
-            this.clickedSquare = new PipeSquare(point.x, point.y);
+            this.clickedSquare = e.button === 0 ? new PipeSquare(point.x, point.y) : new EmptySquare(point.x, point.y);
             console.log(`[${point.x}, ${point.y}] - ${this.getArrayPosition(this.clickedSquare)}`);
             Game.state = GAME_STATE.PlayerInputReceived;
         }
     }
-
 
     private onMouseMove = (e: MouseEvent): void =>
     {
@@ -69,6 +69,7 @@ class LogicBoard implements IGameBoard
 
     public render(): void
     {
+        this._gameWindow.clearScreen();
         for (let i = 1; i < this.segmentsX; i++)
         {
             this._gameWindow.drawLine(i * this.xInterval, 0, i * this.xInterval, this._gameWindow.height);
@@ -92,7 +93,7 @@ class LogicBoard implements IGameBoard
         return this.squares[arrayPos];
     }
 
-    public activateSquare(square: LogicSquare): void
+    public setSquare(square: LogicSquare): void
     {
         const arrayPos = (square.GridY - 1) * this.segmentsX + square.GridX - 1;
         this.squares[arrayPos] = square;
@@ -102,7 +103,7 @@ class LogicBoard implements IGameBoard
     public drawGridBox(x: number, y: number, color = "grey", isFillable = true): void
     {
         if (isFillable)
-            this._gameWindow.fillRect((x * this.xInterval) + 1, (y * this.yInterval) + 1, this.xInterval - 2, this.yInterval - 2, color);
+            this._gameWindow.fillRect(((x - 1) * this.xInterval) + 1, ((y - 1) * this.yInterval) + 1, this.xInterval - 2, this.yInterval - 2, color);
         else
             this._gameWindow.strokeRect((x * this.xInterval) + 1, (y * this.yInterval) + 1, this.xInterval - 2, this.yInterval - 2, color);
     }
