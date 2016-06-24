@@ -14,18 +14,19 @@
     drawGridCircle(x: number, y: number, color?: string): void
     drawGridCircleTop(x: number, y: number, color?: string): void
     getSquares(): BoardSquare[];
-    getSquare(arrayPos: number): BoardSquare
+    getSquare(gridX: number, gridY: number): BoardSquare
     render(): void;
     setSquare(square: BoardSquare): void;
 }
 
-//interface ILogicBoard implements IGameBoard
-//{
-//    squares: LogicSquare[];
-//    activationOrder: LogicSquare[];
-//    hoveredSquare: LogicSquare;
-//    clickedSquare: LogicSquare;
-//    getSquares(): LogicSquare[];
-//    getSquare(arrayPos: number): LogicSquare
-//    setSquare(square: LogicSquare): void;
-//}
+interface ILogicBoard extends IGameBoard
+{
+    squares: LogicSquare[];
+    activationOrder: LogicSquare[];
+    hoveredSquare: LogicSquare;
+    clickedSquare: LogicSquare;
+
+    getSquares(): LogicSquare[];
+    getSquare(gridX: number, gridY: number): LogicSquare
+    setSquare(square: LogicSquare): void;
+}

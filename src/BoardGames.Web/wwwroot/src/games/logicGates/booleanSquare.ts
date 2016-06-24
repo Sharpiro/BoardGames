@@ -11,9 +11,14 @@ class EmptySquare extends LogicSquare
     {
         //draw nothing
     }
+
+    public update(previousSquare: LogicSquare)
+    {
+        this.setActive(false);
+    }
 }
 
-class BooleanSquare extends LogicSquare
+class LampSquare extends LogicSquare
 {
     constructor(gridX: number, gridY: number, isActive = false)
     {
@@ -27,6 +32,12 @@ class BooleanSquare extends LogicSquare
         else
             gameBoard.drawGridBox(this.GridX, this.GridY, "white");
     }
+
+    public update(previousSquare: LogicSquare)
+    {
+        if (previousSquare.isActive())
+            this.setActive(true);
+    }
 }
 
 class PowerSquare extends LogicSquare
@@ -38,7 +49,15 @@ class PowerSquare extends LogicSquare
 
     public render(gameBoard: IGameBoard): void
     {
-        gameBoard.drawGridBox(this.GridX, this.GridY, "red");
+        if (this.isActive())
+            gameBoard.drawGridBox(this.GridX, this.GridY, "red");
+        else
+            gameBoard.drawGridBox(this.GridX, this.GridY, "red", false);
+    }
+
+    public update(previousSquare: LogicSquare)
+    {
+
     }
 }
 
@@ -51,6 +70,33 @@ class PipeSquare extends LogicSquare
 
     public render(gameBoard: IGameBoard): void
     {
-        gameBoard.drawSkinnyGridBox(this.GridX, this.GridY);
+        if (this.isActive())
+            gameBoard.drawSkinnyGridBox(this.GridX, this.GridY, "red", true);
+        else
+            gameBoard.drawSkinnyGridBox(this.GridX, this.GridY, "red", false);
+    }
+
+    public update(previousSquare: LogicSquare)
+    {
+        if (previousSquare.isActive())
+            this.setActive(true);
+    }
+}
+
+class InverterSquare extends LogicSquare
+{
+    constructor(gridX: number, gridY: number, isActive = false)
+    {
+        super(gridX, gridY, LogicSquareType.Pipe, isActive);
+    }
+
+    public render(gameBoard: IGameBoard): void
+    {
+        gameBoard.drawGridBox(this.GridX, this.GridY, "orange");
+    }
+
+    public update(previousSquare: LogicSquare)
+    {
+        this.setActive(!previousSquare.isActive());
     }
 }

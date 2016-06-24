@@ -22,9 +22,19 @@ abstract class LogicSquare extends BoardSquare
         this._isActive = state;
     }
 
+    public switchActive(): void
+    {
+        this._isActive = !this._isActive;
+    }
+
     public isNotEmpty(): boolean
     {
         return this.type !== LogicSquareType.Empty;
+    }
+
+    public update(previousSquare: LogicSquare): void
+    {
+
     }
 }
 

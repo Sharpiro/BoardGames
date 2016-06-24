@@ -1,9 +1,10 @@
 /// <reference path="../../core/game"/>
 /// <reference path="./booleanSquare"/>
+/// <reference path="../../core/GameWindow"/>
 
 class LogicGame extends Game
 {
-    constructor(gameBoard: IGameBoard)
+    constructor(protected gameBoard: ILogicBoard)
     {
         super(gameBoard);
         Game.state = GAME_STATE.AwaitingPlayerInput;
@@ -14,9 +15,24 @@ class LogicGame extends Game
     private initialize(): void
     {
         this.gameBoard.setSquare(new PowerSquare(1, 1));
-        this.gameBoard.setSquare(new PowerSquare(15, 1));
-        this.gameBoard.setSquare(new BooleanSquare(5, 1));
-        this.gameBoard.setSquare(new BooleanSquare(10, 1));
+        this.gameBoard.setSquare(new InverterSquare(5, 1));
+        this.gameBoard.setSquare(new LampSquare(9, 1));
+        this.gameBoard.setSquare(new PipeSquare(2, 1));
+        this.gameBoard.setSquare(new PipeSquare(3, 1));
+        this.gameBoard.setSquare(new PipeSquare(4, 1));
+        this.gameBoard.setSquare(new PipeSquare(6, 1));
+        this.gameBoard.setSquare(new PipeSquare(7, 1));
+        this.gameBoard.setSquare(new PipeSquare(8, 1));
+
+        this.gameBoard.setSquare(new PowerSquare(1, 3));
+        this.gameBoard.setSquare(new LampSquare(9, 3));
+        this.gameBoard.setSquare(new PipeSquare(2, 3));
+        this.gameBoard.setSquare(new PipeSquare(3, 3));
+        this.gameBoard.setSquare(new PipeSquare(4, 3));
+        this.gameBoard.setSquare(new PipeSquare(5, 3));
+        this.gameBoard.setSquare(new PipeSquare(6, 3));
+        this.gameBoard.setSquare(new PipeSquare(7, 3));
+        this.gameBoard.setSquare(new PipeSquare(8, 3));
     }
 
     protected tick = (time: number = null): void =>
@@ -39,20 +55,26 @@ class LogicGame extends Game
 
     private checkSquares()
     {
-        var squares = this.gameBoard.getSquares() as LogicSquare[];
-        for (let i = 1; i < squares.length - 1; i++)
+        var squares = this.gameBoard.getSquares();
+        for (let i = 0; i < squares.length - 1; i++)
         {
-            if (squares[i - 1].isActive() && squares[i].isNotEmpty())
-            {
-                squares[i].setActive(true);
-            }
-            else if (squares[i + 1].isActive() && squares[i].isNotEmpty())
-            {
-                squares[i].setActive(true);
-            }
-            else
+            if (squares[i].type != LogicSquareType.Power)
                 squares[i].setActive(false);
         }
+        for (let i = 0; i < squares.length; i++)
+        {
+            if (squares[i - 1])
+            {
+                squares[i].update(squares[i - 1]);
+            }
+        }
+        //for (let i = squares.length - 1; i > 0; i--)
+        //{
+        //    if (squares[i + 1] && squares[i + 1].isActive() && squares[i].isNotEmpty())
+        //    {
+        //        squares[i].setActive(true);
+        //    }
+        //}
     }
 
     protected updateInput()

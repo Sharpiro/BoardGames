@@ -37,9 +37,17 @@ class LogicBoard implements IGameBoard
             const gridPosition = this.getGridPosition(e.clientX, e.clientY);
             this.hoveredSquare.GridX = gridPosition.x;
             this.hoveredSquare.GridY = gridPosition.y;
-            var point = new Point(this.hoveredSquare.GridX, this.hoveredSquare.GridY);
-            this.clickedSquare = e.button === 0 ? new PipeSquare(point.x, point.y) : new EmptySquare(point.x, point.y);
-            console.log(`[${point.x}, ${point.y}] - ${this.getArrayPosition(this.clickedSquare)}`);
+            console.log(e.button);
+            switch (e.button)
+            {
+                case 0: this.clickedSquare = new PipeSquare(gridPosition.x, gridPosition.y);
+                    break;
+                case 2: this.clickedSquare = new EmptySquare(gridPosition.x, gridPosition.y);
+                    break;
+                case 1: (this.clickedSquare = this.getSquare(gridPosition.x, gridPosition.y)).switchActive();
+                    break;
+            }
+            console.log(`[${gridPosition.x}, ${gridPosition.y}] - ${this.getArrayPosition(this.clickedSquare)}`);
             Game.state = GAME_STATE.PlayerInputReceived;
         }
     }
@@ -88,8 +96,9 @@ class LogicBoard implements IGameBoard
         return this.squares.slice();
     }
 
-    public getSquare(arrayPos: number): LogicSquare
+    public getSquare(gridX: number, gridY: number): LogicSquare
     {
+        const arrayPos = (gridY - 1) * this.segmentsX + gridX - 1;
         return this.squares[arrayPos];
     }
 
@@ -105,7 +114,7 @@ class LogicBoard implements IGameBoard
         if (isFillable)
             this._gameWindow.fillRect(((x - 1) * this.xInterval) + 1, ((y - 1) * this.yInterval) + 1, this.xInterval - 2, this.yInterval - 2, color);
         else
-            this._gameWindow.strokeRect((x * this.xInterval) + 1, (y * this.yInterval) + 1, this.xInterval - 2, this.yInterval - 2, color);
+            this._gameWindow.strokeRect(((x - 1) * this.xInterval) + 1, ((y - 1) * this.yInterval) + 1, this.xInterval - 2, this.yInterval - 2, color);
     }
 
     public drawSkinnyGridBox(x: number, y: number, color = "grey", isFillable = true): void
