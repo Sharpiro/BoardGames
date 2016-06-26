@@ -4,6 +4,7 @@ abstract class LogicSquare extends BoardSquare
 {
     public type: LogicSquareType
     private _isActive = false;
+    public power = 4;
 
     constructor(gridX: number, gridY: number, type = LogicSquareType.Empty, isActive = false)
     {
@@ -14,7 +15,10 @@ abstract class LogicSquare extends BoardSquare
 
     public isActive(): boolean
     {
-        return (this.type !== LogicSquareType.Empty && this._isActive)
+        var isEmpty = this.type !== LogicSquareType.Empty;
+        var isActive = this._isActive;
+        var hasPower = this.power > 0;
+        return isEmpty && isActive && hasPower;
     }
 
     public setActive(state: boolean): void
@@ -38,4 +42,4 @@ abstract class LogicSquare extends BoardSquare
     }
 }
 
-enum LogicSquareType { Empty, Power, Boolean, Pipe }
+enum LogicSquareType { Empty, Power, Lamp, Pipe }

@@ -22,7 +22,8 @@ class LampSquare extends LogicSquare
 {
     constructor(gridX: number, gridY: number, isActive = false)
     {
-        super(gridX, gridY, LogicSquareType.Boolean, isActive);
+        super(gridX, gridY, LogicSquareType.Lamp, isActive);
+        this.power = 2;
     }
 
     public render(gameBoard: IGameBoard): void
@@ -33,10 +34,18 @@ class LampSquare extends LogicSquare
             gameBoard.drawGridBox(this.GridX, this.GridY, "white");
     }
 
-    public update(previousSquare: LogicSquare)
+    public update(otherSquare: LogicSquare)
     {
-        if (previousSquare.isActive())
+        if (this.isActive())
+            return;
+        if (otherSquare.isActive())
+        {
             this.setActive(true);
+            if (otherSquare.type === LogicSquareType.Lamp)
+            {
+                this.power = otherSquare.power - 1;
+            }
+        }
     }
 }
 
@@ -45,6 +54,7 @@ class PowerSquare extends LogicSquare
     constructor(gridX: number, gridY: number, isActive = true)
     {
         super(gridX, gridY, LogicSquareType.Power, isActive);
+        this.power = 5;
     }
 
     public render(gameBoard: IGameBoard): void
@@ -76,10 +86,42 @@ class PipeSquare extends LogicSquare
             gameBoard.drawSkinnyGridBox(this.GridX, this.GridY, "red", false);
     }
 
+    public update(otherSquare: LogicSquare)
+    {
+        if (this.isActive())
+            return;
+        if (otherSquare.isActive())
+        {
+            this.setActive(true);
+            this.power = otherSquare.power - 1;
+        }
+    }
+}
+
+class RepeaterSquare extends LogicSquare
+{
+    private basePower = this.power;
+
+    constructor(gridX: number, gridY: number, isActive = false)
+    {
+        super(gridX, gridY, LogicSquareType.Pipe, isActive);
+    }
+
+    public render(gameBoard: IGameBoard): void
+    {
+        if (this.isActive())
+            gameBoard.drawGridBox(this.GridX, this.GridY, "#66CD00");
+        else
+            gameBoard.drawGridBox(this.GridX, this.GridY, "#66CD00", false);
+    }
+
     public update(previousSquare: LogicSquare)
     {
         if (previousSquare.isActive())
+        {
             this.setActive(true);
+            this.power = this.basePower + previousSquare.power;
+        }
     }
 }
 
