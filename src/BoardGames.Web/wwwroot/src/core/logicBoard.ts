@@ -35,16 +35,24 @@ class LogicBoard implements IGameBoard
         if (Game.state === GAME_STATE.AwaitingPlayerInput)
         {
             const gridPosition = this.getGridPosition(e.clientX, e.clientY);
-            this.hoveredSquare.GridX = gridPosition.x;
-            this.hoveredSquare.GridY = gridPosition.y;
-            console.log(e.button);
+            this.hoveredSquare = this.getSquare(gridPosition.x, gridPosition.y);
+            this.clickedSquare = this.hoveredSquare;
             switch (e.button)
             {
-                case 0: this.clickedSquare = new PipeSquare(gridPosition.x, gridPosition.y);
+                case 0:
+                    if (this.clickedSquare.type !== LogicSquareType.Power)
+                    {
+                        this.clickedSquare = new PipeSquare(gridPosition.x, gridPosition.y);
+                    }
                     break;
-                case 2: this.clickedSquare = new EmptySquare(gridPosition.x, gridPosition.y);
+                case 2:
+                    if (this.clickedSquare.type !== LogicSquareType.Power)
+                    {
+                        this.clickedSquare = new EmptySquare(gridPosition.x, gridPosition.y);
+                    }
                     break;
-                case 1: (this.clickedSquare = this.getSquare(gridPosition.x, gridPosition.y)).switchActive();
+                case 1:
+                    this.clickedSquare.switchActive();
                     break;
             }
             console.log(`[${gridPosition.x}, ${gridPosition.y}] - ${this.getArrayPosition(this.clickedSquare)}`);
@@ -55,8 +63,7 @@ class LogicBoard implements IGameBoard
     private onMouseMove = (e: MouseEvent): void =>
     {
         var gridPosition = this.getGridPosition(e.clientX, e.clientY);
-        this.hoveredSquare.GridX = gridPosition.x;
-        this.hoveredSquare.GridY = gridPosition.y;
+        this.hoveredSquare = this.getSquare(gridPosition.x, gridPosition.y);
     }
 
     public getArrayPosition(square: LogicSquare): number

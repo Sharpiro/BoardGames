@@ -15,30 +15,37 @@ class LogicGame extends Game
 
     private initialize(): void
     {
-        this.gameBoard.setSquare(new PowerSquare(1, 1, false));
+        this.gameBoard.setSquare(new PowerSquare(1, 1, true));
         this.gameBoard.setSquare(new PipeSquare(2, 1));
         this.gameBoard.setSquare(new PipeSquare(3, 1));
         this.gameBoard.setSquare(new PipeSquare(4, 1));
-        this.gameBoard.setSquare(new InverterSquare(5, 1));
+        this.gameBoard.setSquare(new LampSquare(5, 1));
 
-        this.gameBoard.setSquare(new PipeSquare(6, 1));
-        this.gameBoard.setSquare(new PipeSquare(6, 2));
-        this.gameBoard.setSquare(new PipeSquare(6, 3));
-        this.gameBoard.setSquare(new PipeSquare(6, 5));
-        this.gameBoard.setSquare(new PipeSquare(6, 6));
-        this.gameBoard.setSquare(new PipeSquare(6, 7));
+        //this.gameBoard.setSquare(new PipeSquare(6, 1));
+        //this.gameBoard.setSquare(new PipeSquare(7, 1));
+        //this.gameBoard.setSquare(new PipeSquare(8, 1));
+        //this.gameBoard.setSquare(new PipeSquare(9, 1));
+        //this.gameBoard.setSquare(new PipeSquare(10, 1));
+        //this.gameBoard.setSquare(new PowerSquare(11, 1, true));
 
-        this.gameBoard.setSquare(new PowerSquare(1, 7, false));
+        //this.gameBoard.setSquare(new PipeSquare(5, 2));
+        //this.gameBoard.setSquare(new PipeSquare(5, 3));
+        //this.gameBoard.setSquare(new PipeSquare(5, 4));
+        //this.gameBoard.setSquare(new PipeSquare(5, 5));
+        //this.gameBoard.setSquare(new PipeSquare(5, 6));
+        //this.gameBoard.setSquare(new PowerSquare(5, 7, true));
+
+        this.gameBoard.setSquare(new PowerSquare(1, 7));
         this.gameBoard.setSquare(new PipeSquare(2, 7));
         this.gameBoard.setSquare(new PipeSquare(3, 7));
         this.gameBoard.setSquare(new PipeSquare(4, 7));
-        this.gameBoard.setSquare(new InverterSquare(5, 7));
+        this.gameBoard.setSquare(new LampSquare(5, 7));
         this.gameBoard.setSquare(new InverterSquare(7, 4));
 
-        this.gameBoard.setSquare(new PipeSquare(8, 4));
-        this.gameBoard.setSquare(new PipeSquare(9, 4));
-        this.gameBoard.setSquare(new PipeSquare(10, 4));
-        this.gameBoard.setSquare(new LampSquare(11, 4));
+        //this.gameBoard.setSquare(new PipeSquare(8, 4));
+        //this.gameBoard.setSquare(new PipeSquare(9, 4));
+        //this.gameBoard.setSquare(new PipeSquare(10, 4));
+        //this.gameBoard.setSquare(new LampSquare(11, 4));
     }
 
     protected tick = (time: number = null): void =>
@@ -62,37 +69,40 @@ class LogicGame extends Game
     private checkSquares()
     {
         var squares = this.gameBoard.getSquares();
-        for (let i = 0; i < squares.length - 1; i++)
-        {
-            if (squares[i].type != LogicSquareType.Power)
-                squares[i].setActive(false);
-        }
+        //for (let i = 0; i < squares.length - 1; i++)
+        //{
+        //    //if (squares[i].type != LogicSquareType.Power)
+        //    //{
+        //    var square = squares[i];
+        //    if (!square.isActive())
+        //    {
+        //        squares[i].deactivate();
+        //    }
+        //    //}
+        //}
         for (let i = 0; i < squares.length; i++)
         {
-            if (squares[i - 1])
-            {
-                squares[i].update(squares[i - 1]);
-            }
+            squares[i].update(squares, i);
         }
-        for (let i = 0; i < squares.length; i++)
-        {
-            let square = squares[i];
-                let otherSquare = squares[i + 15];
-                if (otherSquare)
-                {
-                    squares[i].update(otherSquare);
-                }
-        }
+        //for (let i = 0; i < squares.length; i++)
+        //{
+        //    let square = squares[i];
+        //    let otherSquare = squares[i + 15];
+        //    if (otherSquare)
+        //    {
+        //        squares[i].update(otherSquare);
+        //    }
+        //}
 
-        for (let i = squares.length - 1; i >= 0; i--)
-        {
-            let square = squares[i];
-                let otherSquare = squares[i - 15];
-                if (otherSquare)
-                {
-                    square.update(otherSquare);
-                }
-        }
+        //for (let i = squares.length - 1; i >= 0; i--)
+        //{
+        //    let square = squares[i];
+        //    let otherSquare = squares[i - 15];
+        //    if (otherSquare)
+        //    {
+        //        square.update(otherSquare);
+        //    }
+        //}
     }
 
     protected updateInput()

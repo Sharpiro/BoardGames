@@ -12,9 +12,9 @@ class EmptySquare extends LogicSquare
         //draw nothing
     }
 
-    public update(previousSquare: LogicSquare)
+    public update(squares: LogicSquare[], index: number): void
     {
-        this.setActive(false);
+        this.deactivate();
     }
 }
 
@@ -23,7 +23,7 @@ class LampSquare extends LogicSquare
     constructor(gridX: number, gridY: number, isActive = false)
     {
         super(gridX, gridY, LogicSquareType.Lamp, isActive);
-        this.power = 2;
+        this.power = 4;
     }
 
     public render(gameBoard: IGameBoard): void
@@ -34,17 +34,21 @@ class LampSquare extends LogicSquare
             gameBoard.drawGridBox(this.GridX, this.GridY, "white");
     }
 
-    public update(otherSquare: LogicSquare)
+    public update(squares: LogicSquare[], index: number): void
     {
-        if (this.isActive())
-            return;
-        if (otherSquare.isActive())
+        //if (this.isActive())
+        //    return;
+        let otherSquare = squares[index - 1];
+        if (otherSquare && otherSquare.isActive())
         {
-            this.setActive(true);
-            if (otherSquare.type === LogicSquareType.Lamp)
-            {
-                this.power = otherSquare.power - 1;
-            }
+            this.activate(otherSquare.powerSource);
+            //otherSquare = squares[index + 15];
+            //if (otherSquare)
+            //    otherSquare.activate(this.powerSource);
+            //if (otherSquare.type === LogicSquareType.Lamp)
+            //{
+            //    this.power = otherSquare.power - 1;
+            //}
         }
     }
 }
@@ -55,6 +59,7 @@ class PowerSquare extends LogicSquare
     {
         super(gridX, gridY, LogicSquareType.Power, isActive);
         this.power = 5;
+        this.powerSource = this;
     }
 
     public render(gameBoard: IGameBoard): void
@@ -65,7 +70,7 @@ class PowerSquare extends LogicSquare
             gameBoard.drawGridBox(this.GridX, this.GridY, "red", false);
     }
 
-    public update(previousSquare: LogicSquare)
+    public update(squares: LogicSquare[], index: number): void
     {
 
     }
@@ -86,13 +91,32 @@ class PipeSquare extends LogicSquare
             gameBoard.drawSkinnyGridBox(this.GridX, this.GridY, "red", false);
     }
 
-    public update(otherSquare: LogicSquare)
+    public update(squares: LogicSquare[], index: number): void
     {
         if (this.isActive())
             return;
-        if (otherSquare.isActive())
+        let otherSquare = squares[index - 1];
+        if (otherSquare && otherSquare.isActive())
         {
-            this.setActive(true);
+            this.activate(otherSquare.powerSource);
+            this.power = otherSquare.power - 1;
+        }
+        otherSquare = squares[index + 1];
+        if (otherSquare && otherSquare.isActive())
+        {
+            this.activate(otherSquare.powerSource);
+            this.power = otherSquare.power - 1;
+        }
+        otherSquare = squares[index - 15];
+        if (otherSquare && otherSquare.isActive())
+        {
+            this.activate(otherSquare.powerSource);
+            this.power = otherSquare.power - 1;
+        }
+        otherSquare = squares[index + 15];
+        if (otherSquare && otherSquare.isActive())
+        {
+            this.activate(otherSquare.powerSource);
             this.power = otherSquare.power - 1;
         }
     }
@@ -115,12 +139,13 @@ class RepeaterSquare extends LogicSquare
             gameBoard.drawGridBox(this.GridX, this.GridY, "#66CD00", false);
     }
 
-    public update(previousSquare: LogicSquare)
+    public update(squares: LogicSquare[], index: number): void
     {
-        if (previousSquare.isActive())
+        let otherSquare = squares[index - 1];
+        if (otherSquare && otherSquare.isActive())
         {
-            this.setActive(true);
-            this.power = this.basePower + previousSquare.power;
+            this.activate(otherSquare.powerSource);
+            this.power = this.basePower + otherSquare.power;
         }
     }
 }
@@ -137,8 +162,10 @@ class InverterSquare extends LogicSquare
         gameBoard.drawGridBox(this.GridX, this.GridY, "orange");
     }
 
-    public update(previousSquare: LogicSquare)
+    public update(squares: LogicSquare[], index: number): void
     {
-        this.setActive(!previousSquare.isActive());
+        var otherSquare = squares[index - 1];
+        if (otherSquare && !otherSquare.isActive())
+            this.activate(otherSquare.powerSource);
     }
 }

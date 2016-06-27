@@ -5,6 +5,7 @@ abstract class LogicSquare extends BoardSquare
     public type: LogicSquareType
     private _isActive = false;
     public power = 4;
+    public powerSource: LogicSquare;
 
     constructor(gridX: number, gridY: number, type = LogicSquareType.Empty, isActive = false)
     {
@@ -18,12 +19,26 @@ abstract class LogicSquare extends BoardSquare
         var isEmpty = this.type !== LogicSquareType.Empty;
         var isActive = this._isActive;
         var hasPower = this.power > 0;
-        return isEmpty && isActive && hasPower;
+        var powerSorceActive = (this.powerSource && this.powerSource._isActive) || this.type === LogicSquareType.Power;
+        return isEmpty && isActive && hasPower && powerSorceActive;
     }
 
-    public setActive(state: boolean): void
+    //public setActive(state: boolean): void
+    //{
+    //    this._isActive = state;
+    //}
+
+    public activate(powerSource: LogicSquare): void
     {
-        this._isActive = state;
+        this._isActive = true;
+        this.powerSource = powerSource;
+    }
+
+    public deactivate(): void
+    {
+        this._isActive = false;
+        this.powerSource = null;
+        this.power = 0;
     }
 
     public switchActive(): void
@@ -36,7 +51,7 @@ abstract class LogicSquare extends BoardSquare
         return this.type !== LogicSquareType.Empty;
     }
 
-    public update(previousSquare: LogicSquare): void
+    public update(squares: LogicSquare[], index: number): void
     {
 
     }

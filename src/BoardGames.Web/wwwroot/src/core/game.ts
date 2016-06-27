@@ -1,4 +1,6 @@
-﻿abstract class Game
+﻿/// <reference path= "./InputHandler" />
+
+abstract class Game
 {
     protected frameId: number;
     protected inputHandler: InputHandler;
