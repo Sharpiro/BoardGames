@@ -43,7 +43,7 @@
         this.context.fillStyle = color;
         this.context.beginPath();
         const radius = Math.min(width, height) / 2 - 1;
-        this.context.arc(((x - 1) * width) + width/ 2, ((y - 1) * height) + height/ 2, radius, 0, 2 * Math.PI);
+        this.context.arc(((x - 1) * width) + width / 2, ((y - 1) * height) + height / 2, radius, 0, 2 * Math.PI);
         this.context.fill();
     }
 
@@ -52,12 +52,17 @@
         this.context.fillStyle = color;
         this.context.beginPath();
         const radius = Math.min(width, height) / 2 - 1;
-        this.context.arc(((x - 1) * width) + width / 2, ((1 - 1) * height) + height/ 2, radius, 0, 2 * Math.PI);
+        this.context.arc(((x - 1) * width) + width / 2, ((1 - 1) * height) + height / 2, radius, 0, 2 * Math.PI);
         this.context.fill();
     }
 
     public clearScreen()
     {
         this.context.clearRect(0, 0, this.width, this.height);
+    }
+
+    public registerEvent(eventName: string, callback: (event: UIEvent) => void): void
+    {
+        this.canvas.addEventListener(eventName, callback, false);
     }
 }

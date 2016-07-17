@@ -1,43 +1,171 @@
 ﻿/// <reference path="./logicSquare"/>
 
-class BooleanSquare extends LogicSquare
+class EmptySquare extends LogicSquare
 {
-    private _isActive = false;
-
-    constructor(x = 0, y = 0, width = 0, height = 0, public isActive = false)
+    constructor(gridX: number, gridY: number)
     {
-        super(x, y, width, height, LogicSquareType.Boolean);
+        super(gridX, gridY, LogicSquareType.Empty);
     }
 
-    public render(gameWindow: GameWindow): void
+    public render(gameBoard: IGameBoard): void
     {
-        super.render(gameWindow);
+        //draw nothing
+    }
+
+    public update(squares: LogicSquare[], index: number): void
+    {
+        this.deactivate();
+    }
+}
+
+class LampSquare extends LogicSquare
+{
+    constructor(gridX: number, gridY: number, isActive = false)
+    {
+        super(gridX, gridY, LogicSquareType.Lamp, isActive);
+        this.power = 4;
+    }
+
+    public render(gameBoard: IGameBoard): void
+    {
+        if (this.isActive())
+            gameBoard.drawGridBox(this.GridX, this.GridY, "yellow");
+        else
+            gameBoard.drawGridBox(this.GridX, this.GridY, "white");
+    }
+
+    public update(squares: LogicSquare[], index: number): void
+    {
+        //if (this.isActive())
+        //    return;
+        let otherSquare = squares[index - 1];
+        if (otherSquare && otherSquare.isActive())
+        {
+            this.activate(otherSquare.powerSource);
+            //otherSquare = squares[index + 15];
+            //if (otherSquare)
+            //    otherSquare.activate(this.powerSource);
+            //if (otherSquare.type === LogicSquareType.Lamp)
+            //{
+            //    this.power = otherSquare.power - 1;
+            //}
+        }
     }
 }
 
 class PowerSquare extends LogicSquare
 {
-
-    constructor(x = 0, y = 0, width = 0, height = 0)
+    constructor(gridX: number, gridY: number, isActive = true)
     {
-        super(x, y, width, height, LogicSquareType.Power);
+        super(gridX, gridY, LogicSquareType.Power, isActive);
+        this.power = 5;
+        this.powerSource = this;
     }
 
-    public render(gameWindow: GameWindow): void
+    public render(gameBoard: IGameBoard): void
     {
-        super.render(gameWindow, true, "red");
+        if (this.isActive())
+            gameBoard.drawGridBox(this.GridX, this.GridY, "red");
+        else
+            gameBoard.drawGridBox(this.GridX, this.GridY, "red", false);
+    }
+
+    public update(squares: LogicSquare[], index: number): void
+    {
+
     }
 }
 
 class PipeSquare extends LogicSquare
 {
-    constructor(x = 0, y = 0, width = 0, height = 0)
+    constructor(gridX: number, gridY: number, isActive = false)
     {
-        super(x, y, width, height, LogicSquareType.Power);
+        super(gridX, gridY, LogicSquareType.Pipe, isActive);
     }
 
-    public render(gameWindow: GameWindow): void
+    public render(gameBoard: IGameBoard): void
     {
-        super.render(gameWindow);
+        if (this.isActive())
+            gameBoard.drawSkinnyGridBox(this.GridX, this.GridY, "red", true);
+        else
+            gameBoard.drawSkinnyGridBox(this.GridX, this.GridY, "red", false);
+    }
+
+    public update(squares: LogicSquare[], index: number): void
+    {
+        if (this.isActive())
+            return;
+        let otherSquare = squares[index - 1];
+        if (otherSquare && otherSquare.isActive())
+        {
+            this.activate(otherSquare.powerSource);
+            this.power = otherSquare.power - 1;
+        }
+        otherSquare = squares[index + 1];
+        if (otherSquare && otherSquare.isActive())
+        {
+            this.activate(otherSquare.powerSource);
+            this.power = otherSquare.power - 1;
+        }
+        otherSquare = squares[index - 15];
+        if (otherSquare && otherSquare.isActive())
+        {
+            this.activate(otherSquare.powerSource);
+            this.power = otherSquare.power - 1;
+        }
+        otherSquare = squares[index + 15];
+        if (otherSquare && otherSquare.isActive())
+        {
+            this.activate(otherSquare.powerSource);
+            this.power = otherSquare.power - 1;
+        }
+    }
+}
+
+class RepeaterSquare extends LogicSquare
+{
+    private basePower = this.power;
+
+    constructor(gridX: number, gridY: number, isActive = false)
+    {
+        super(gridX, gridY, LogicSquareType.Pipe, isActive);
+    }
+
+    public render(gameBoard: IGameBoard): void
+    {
+        if (this.isActive())
+            gameBoard.drawGridBox(this.GridX, this.GridY, "#66CD00");
+        else
+            gameBoard.drawGridBox(this.GridX, this.GridY, "#66CD00", false);
+    }
+
+    public update(squares: LogicSquare[], index: number): void
+    {
+        let otherSquare = squares[index - 1];
+        if (otherSquare && otherSquare.isActive())
+        {
+            this.activate(otherSquare.powerSource);
+            this.power = this.basePower + otherSquare.power;
+        }
+    }
+}
+
+class InverterSquare extends LogicSquare
+{
+    constructor(gridX: number, gridY: number, isActive = false)
+    {
+        super(gridX, gridY, LogicSquareType.Pipe, isActive);
+    }
+
+    public render(gameBoard: IGameBoard): void
+    {
+        gameBoard.drawGridBox(this.GridX, this.GridY, "orange");
+    }
+
+    public update(squares: LogicSquare[], index: number): void
+    {
+        var otherSquare = squares[index - 1];
+        if (otherSquare && !otherSquare.isActive())
+            this.activate(otherSquare.powerSource);
     }
 }

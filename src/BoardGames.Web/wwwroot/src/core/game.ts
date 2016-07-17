@@ -1,4 +1,6 @@
-﻿abstract class Game
+﻿/// <reference path= "./InputHandler" />
+
+abstract class Game
 {
     protected frameId: number;
     protected inputHandler: InputHandler;
@@ -6,17 +8,16 @@
     protected startTime: number;
     protected nowTime: number;
 
-    constructor(protected gameWindow: GameWindow, protected gameBoard: IGameBoard)
+    constructor(protected gameBoard: IGameBoard)
     {
         this.inputHandler = new InputHandler();
         Game.state = GAME_STATE.AwaitingPlayerInput;
     }
     protected render(): void
     {
-        this.gameWindow.clearScreen();
-        this.gameBoard.render(this.gameWindow);
+        this.gameBoard.render();
         if (Game.state === GAME_STATE.AwaitingPlayerInput)
-            this.gameBoard.drawSkinnyGridBox(this.gameBoard.hoveredSquare.gridPosition.x, this.gameBoard.hoveredSquare.gridPosition.y);
+            this.gameBoard.drawSkinnyGridBox(this.gameBoard.hoveredSquare.GridX, this.gameBoard.hoveredSquare.GridY);
     }
 
     protected updateView()
