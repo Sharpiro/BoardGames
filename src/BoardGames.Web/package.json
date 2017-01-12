@@ -1,13 +1,14 @@
 {
-    "version": "1.0.0",
-    "name": "asp.net",
-    "private": true,
-    "scripts": {
-        "postinstall": "typings install"
-    },
-    "dependencies": {
-        "jquery": "^3.0.0"
-    },
-    "devDependencies": {
-    }
+  "version": "1.0.0",
+  "name": "asp.net",
+  "private": true,
+  "scripts": {
+    "postinstall": "typings install"
+  },
+  "dependencies": {
+    "jquery": "^3.0.0"
+  },
+  "devDependencies": {
+    "typings": "2.1.0"
+  }
 }
