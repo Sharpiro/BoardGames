@@ -9,6 +9,7 @@
     hoveredSquare: BoardSquare;
     clickedSquare: BoardSquare;
 
+    drawImage(image: HTMLImageElement, x: number, y: number): void;
     drawSkinnyGridBox(x: number, y: number, color?: string, isFillable?: boolean): void;
     drawGridBox(x: number, y: number, color?: string, isFillable?: boolean): void
     drawGridCircle(x: number, y: number, color?: string): void

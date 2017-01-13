@@ -27,7 +27,7 @@ abstract class Game
 
     protected abstract update(): void;
     protected abstract updateInput(): void;
-    protected abstract checkWinCondition(owner: OWNER): void;
+    protected abstract checkWinCondition(owner: Owner): void;
 }
 
 enum GAME_STATE

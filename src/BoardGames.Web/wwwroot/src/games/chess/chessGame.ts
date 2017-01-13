@@ -1,11 +1,10 @@
 /// <reference path="../../core/game"/>
-/// <reference path="./booleanSquare"/>
 /// <reference path="../../core/GameWindow"/>
-/// <reference path="../../core/LogicBoard"/>
+/// <reference path="./pieces/Pawn"/>
 
-class LogicGame extends Game
+class ChessGame extends Game
 {
-    constructor(protected gameBoard: ILogicBoard)
+    constructor(protected gameBoard: IGameBoard)
     {
         super(gameBoard);
         Game.state = GAME_STATE.AwaitingPlayerInput;
@@ -15,13 +14,7 @@ class LogicGame extends Game
 
     private initialize(): void
     {
-        this.gameBoard.setSquare(new PowerSquare(1, 1, true));
-        this.gameBoard.setSquare(new PipeSquare(2, 1));
-        this.gameBoard.setSquare(new PipeSquare(3, 1));
-        this.gameBoard.setSquare(new PipeSquare(4, 1));
-        this.gameBoard.setSquare(new LampSquare(5, 1));
-
- 
+        this.gameBoard.setSquare(new Pawn(2, 3, Owner.Empty));
     }
 
     protected tick = (time: number = null): void =>
@@ -45,8 +38,7 @@ class LogicGame extends Game
     private checkSquares()
     {
         var squares = this.gameBoard.getSquares();
-    
-      
+        
     }
 
     protected updateInput()
@@ -63,6 +55,6 @@ class LogicGame extends Game
 
     }
 }
-//var gameWindow = new GameWindow(600, 600);
-//var gameBoard = new LogicBoard(15, 15, gameWindow);
-//var game = new LogicGame(gameBoard);
+var gameWindow = new GameWindow(600, 600);
+var gameBoard = new ChessBoard(8, 8, gameWindow);
+var game = new ChessGame(gameBoard);

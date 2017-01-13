@@ -6,4 +6,6 @@
     }
 
     public abstract render(gameBoard: IGameBoard, isFillable?: boolean, color?: string): void;
+
+    public abstract isActive(): boolean;
 }
