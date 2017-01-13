@@ -8,11 +8,11 @@
         this._isActive = isActive;
     }
 
-    public render(board: IGameBoard): void
+    public render(window: GameWindow): void
     {
         const color = this.owner === Owner.Player ? "black" : "red";
         if (this.isActive())
-            board.drawSkinnyGridBox(this.GridX, this.GridY, color);
+            window.drawSkinnyGridBox(this.GridX, this.GridY, 0, 0, color);
     }
 
     public isActive(): boolean

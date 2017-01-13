@@ -4,7 +4,7 @@
 
 class ChessGame extends Game
 {
-    constructor(protected gameBoard: IGameBoard)
+    constructor(protected gameBoard: GameBoard)
     {
         super(gameBoard);
         Game.state = GAME_STATE.AwaitingPlayerInput;
@@ -14,7 +14,7 @@ class ChessGame extends Game
 
     private initialize(): void
     {
-        this.gameBoard.setSquare(new Pawn(2, 3, Owner.Empty));
+        //this.gameBoard.setSquare(new Pawn(2, 3, Owner.Empty));
     }
 
     protected tick = (time: number = null): void =>
@@ -38,7 +38,6 @@ class ChessGame extends Game
     private checkSquares()
     {
         var squares = this.gameBoard.getSquares();
-        
     }
 
     protected updateInput()

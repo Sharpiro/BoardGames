@@ -1,173 +1,121 @@
-﻿//class LogicBoard
-//{
-//    public static segmentsX: number;
-//    public static segmentsY: number;
-//    public static xInterval: number;
-//    public static yInterval: number;
-//    private squares = [] as Array<Square>;
-//    private activationOrder = [] as Array<Square>;
+﻿/// <reference path="../../src/core/BoardSquare.ts"/>
+/// <reference path="../../src/core/PlayerSquare.ts"/>
 
-//    constructor(segmentsX: number, segmentsY: number)
-//    {
-//        LogicBoard.segmentsX = segmentsX;
-//        LogicBoard.segmentsY = segmentsY;
-//        LogicBoard.xInterval = GameWindow.width / segmentsX;
-//        LogicBoard.yInterval = GameWindow.height / segmentsY;
-//        for (let i = 0; i < segmentsY; i++) 
-//        {
-//            for (let j = 0; j < segmentsX; j++)
-//            {
-//                this.squares.push(new Square(new Point(j + 1, i + 1)));
-//            }
-//        }
-//    }
+class GameBoard
+{
+    public segmentsX: number;
+    public segmentsY: number;
+    public xInterval: number;
+    public yInterval: number;
+    public squares = [] as BoardSquare[];
+    public activationOrder = [] as BoardSquare[];
+    public hoveredSquare: BoardSquare;
+    public clickedSquare: BoardSquare;
 
-//    public render(gameWindow: GameWindow): void
-//    {
-//        for (let i = 1; i < LogicBoard.segmentsX; i++)
-//        {
-//            gameWindow.drawLine(i * LogicBoard.xInterval, 0, i * LogicBoard.xInterval, GameWindow.height);
-//        }
+    constructor(segmentsX: number, segmentsY: number, protected gameWindow: GameWindow)
+    {
+        this.segmentsX = segmentsX;
+        this.segmentsY = segmentsY;
+        this.xInterval = gameWindow.width / segmentsX;
+        this.yInterval = gameWindow.height / segmentsY;
+        this.gameWindow.registerEvent("contextmenu", (e: MouseEvent) => e.preventDefault());
+        this.hoveredSquare = new PlayerSquare(0, 0, Owner.Empty, true);
+        for (let i = 0; i < segmentsY; i++) 
+        {
+            for (let j = 0; j < segmentsX; j++)
+            {
+                this.squares.push(new PlayerSquare(j + 1, i + 1));
+            }
+        }
+    }
 
-//        for (let i = 1; i < LogicBoard.segmentsY; i++)
-//        {
-//            gameWindow.drawLine(0, i * LogicBoard.yInterval, GameWindow.width, i * LogicBoard.yInterval);
-//        }
-//        this.squares.filter(block => block.owner !== OWNER.Empty).forEach((block) => block.render(gameWindow));
-//    }
+    public render(): void
+    {
+        this.gameWindow.clearScreen();
+        if (Game.state === GAME_STATE.AwaitingPlayerInput)
+            var hoveredCoords = this.GetSquareCoordinates(this.hoveredSquare);
+        this.gameWindow.drawSkinnyGridBox(hoveredCoords.x, hoveredCoords.y, this.xInterval, this.yInterval);
 
-//    public getSquares(): Array<Square>
-//    {
-//        return this.squares.slice();
-//    }
+        for (let i = 1; i < this.segmentsX; i++)
+        {
+            this.gameWindow.drawLine(i * this.xInterval, 0, i * this.xInterval, this.gameWindow.height);
+        }
 
-//    public getSquare(position: number): Square
-//    {
-//        return this.squares[position];
-//    }
+        for (let i = 1; i < this.segmentsY; i++)
+        {
+            this.gameWindow.drawLine(0, i * this.yInterval, this.gameWindow.width, i * this.yInterval);
+        }
 
-//    public getRandomEmptySquare(): Square
-//    {
-//        const emptySquares = this.squares.filter((square) => square.owner === OWNER.Empty);
-//        const randomIndex = Math.floor(Math.random() * emptySquares.length);
-//        return emptySquares[randomIndex];
-//    }
+        for (var square of this.squares)
+        {
+            square.render(this.gameWindow);
+        }
+    }
 
-//    public static getRandomEmptyPos(squares: Array<Square>): number
-//    {
-//        const emptySquares = squares.filter((square) => square.owner === OWNER.Empty);
-//        const randomIndex = Math.floor(Math.random() * emptySquares.length);
-//        return randomIndex;
-//    }
+    protected getGridPosition(clientX: number, clientY: number): Point
+    {
+        const offset = this.gameWindow.getBoundingClientRect();
+        const mouseX = clientX - offset.left;
+        const mouseY = clientY - offset.top;
+        const xGridBlock = Math.floor(mouseX / this.xInterval) + 1;
+        const yGridBlock = Math.floor(mouseY / this.yInterval) + 1;
+        return new Point(xGridBlock, yGridBlock);
+    }
 
-//    public getLowestPosInColumn(square: Square): number
-//    {
-//        const column = square.gridPosition.x;
-//        const bottomPosition = column + (LogicBoard.segmentsX * (LogicBoard.segmentsY - 1)) - 1;
-//        let isTaken = true;
-//        let lowestPointPosition: number = null;
-//        for (let i = bottomPosition; isTaken; i -= LogicBoard.segmentsX)
-//        {
-//            if (this.squareIsEmptyPos(i))
-//            {
-//                lowestPointPosition = i;
-//                isTaken = false;
-//            }
-//        }
-//        return lowestPointPosition;
-//    }
+    public GetSquareCoordinates(square: BoardSquare): Point
+    {
+        var xCoord = square.GridX * this.xInterval - this.xInterval;
+        var yCoord = square.GridY * this.yInterval - this.yInterval;
+        return new Point(xCoord, yCoord);
+    }
 
-//    public getLowestSquareInColumnPos(pos: number): number
-//    {
-//        const column = pos % LogicBoard.segmentsX;
-//        const bottomPosition = column + (LogicBoard.segmentsX * (LogicBoard.segmentsY - 1));
-//        let isTaken = true;
-//        let lowestPointPosition: number = null;
-//        for (let i = bottomPosition; isTaken; i -= LogicBoard.segmentsX)
-//        {
-//            if (this.squareIsEmptyPos(i))
-//            {
-//                lowestPointPosition = i;
-//                isTaken = false;
-//            }
-//        }
-//        return lowestPointPosition;
-//    }
+    public getSquares(): Array<BoardSquare>
+    {
+        return this.squares.slice();
+    }
 
-//    public getActivationOrder(): Array<Square>
-//    {
-//        return this.activationOrder;
-//    }
+    public getSquare(gridX: number, gridY: number): BoardSquare
+    {
+        const arrayPos = (gridY - 1) * this.segmentsX + gridX - 1;
+        return this.squares[arrayPos];
+    }
 
-//    public squareIsEmpty(point: Point): boolean
-//    {
-//        const arrayPos = (point.y - 1) * LogicBoard.segmentsX + point.x - 1;
-//        return this.squares[arrayPos].owner === OWNER.Empty;
-//    }
+    public setSquare(square: BoardSquare): void
+    {
+        const arrayPos = (square.GridY - 1) * this.segmentsX + square.GridX - 1;
+        this.squares[arrayPos] = square;
+        this.activationOrder.push(square);
+    }
 
-//    public squareIsEmptyPos(position: number): boolean
-//    {
-//        return this.squares[position].owner === OWNER.Empty;
-//    }
+    public setSquares(squares: BoardSquare[]): void
+    {
+        this.squares = squares;
+        this.activationOrder = [];
+    }
 
-//    public activateSquareByPos(position: number, owner: OWNER): void
-//    {
-//        const square = this.squares[position];
-//        square.owner = owner;
-//        this.activationOrder.push(square);
-//    }
+    //public drawGridBox(x: number, y: number, color = "grey", isFillable = true): void
+    //{
+    //    if (isFillable)
+    //        this.gameWindow.fillRect(((x - 1) * this.xInterval) + 1, ((y - 1) * this.yInterval) + 1, this.xInterval - 2, this.yInterval - 2, color);
+    //    else
+    //        this.gameWindow.strokeRect(((x - 1) * this.xInterval) + 1, ((y - 1) * this.yInterval) + 1, this.xInterval - 2, this.yInterval - 2, color);
+    //}
 
-//    public activateSquare(square: Square): void
-//    {
-//        const arrayPos = (square.gridPosition.y - 1) * LogicBoard.segmentsX + square.gridPosition.x - 1;
-//        this.squares[arrayPos] = square;
-//        this.activationOrder.push(square);
-//    }
+    //public drawSkinnyGridBox(x: number, y: number, color = "grey", isFillable = true): void
+    //{
+    //    if (isFillable)
+    //        this.gameWindow.fillRect((x * this.xInterval) - this.xInterval + 1, (y * this.yInterval - this.yInterval + (this.yInterval / 4.0)) + 1, this.xInterval - 2, this.yInterval / 2 - 2, color);
+    //    else
+    //        this.gameWindow.strokeRect((x * this.xInterval) - this.xInterval + 1, (y * this.yInterval - this.yInterval + (this.yInterval / 4.0)) + 1, this.xInterval - 2, this.yInterval / 2 - 2, color);
+    //}
 
-//    public activateLowestBlockInColumnByPos(pos: number, owner: OWNER): void
-//    {
-//        const coords = pos;
-//        const columnPos = this.getLowestSquareInColumnPos(coords);
-//        const square = this.squares[columnPos];
-//        square.owner = owner;
-//        this.activationOrder.push(square);
-//    }
+    //public drawGridCircle(x: number, y: number, color = "grey"): void
+    //{
+    //    this.gameWindow.drawCircle(x, y, this.xInterval, this.yInterval, color);
+    //}
 
-//    public activateLowestSquareInRandomColumn(owner: OWNER): void
-//    {
-//        const randomPoint = this.getRandomEmptySquare();
-//        const pos = this.getLowestPosInColumn(randomPoint);
-//        this.activateSquareByPos(pos, owner);
-//    }
-
-//    public activateEmptyRandomSquare(): void
-//    {
-//        const square = this.getRandomEmptySquare();
-//        square.owner = OWNER.Computer;
-//        this.activateSquare(square);
-//        this.activationOrder.push(square);
-//    }
-
-//    public resetSquares(): void
-//    {
-//        this.squares.forEach((square) =>
-//        {
-//            square.owner = OWNER.Empty;
-//        });
-//    }
-
-//    public printActivationOrder(): void
-//    {
-//        console.log("---------Player----------");
-//        this.activationOrder.filter(square => square.owner === OWNER.Player).forEach((square, index) =>
-//        {
-//            console.log(`${index + 1}: ${square.toString() }`);
-//        });
-//        console.log("---------Computer--------");
-//        this.activationOrder.filter(square => square.owner === OWNER.Computer).forEach((square, index) =>
-//        {
-//            console.log(`${index + 1}: ${square.toString() }`);
-//        });
-//        console.log(JSON.stringify(this.activationOrder));
-//    }
-//}
+    //public drawGridCircleTop(x: number, y: number, color = "grey"): void
+    //{
+    //    this.gameWindow.drawCircleTop(x, y, this.xInterval, this.yInterval, color);
+    //}
+}

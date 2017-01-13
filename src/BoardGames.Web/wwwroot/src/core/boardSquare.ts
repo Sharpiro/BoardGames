@@ -5,7 +5,7 @@
 
     }
 
-    public abstract render(gameBoard: IGameBoard, isFillable?: boolean, color?: string): void;
+    public abstract render(window: GameWindow, isFillable?: boolean, color?: string): void;
 
     public abstract isActive(): boolean;
 }

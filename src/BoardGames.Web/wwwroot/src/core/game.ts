@@ -8,7 +8,7 @@ abstract class Game
     protected startTime: number;
     protected nowTime: number;
 
-    constructor(protected gameBoard: IGameBoard)
+    constructor(protected gameBoard: GameBoard)
     {
         this.inputHandler = new InputHandler();
         Game.state = GAME_STATE.AwaitingPlayerInput;
@@ -16,8 +16,6 @@ abstract class Game
     protected render(): void
     {
         this.gameBoard.render();
-        if (Game.state === GAME_STATE.AwaitingPlayerInput)
-            this.gameBoard.drawSkinnyGridBox(this.gameBoard.hoveredSquare.GridX, this.gameBoard.hoveredSquare.GridY);
     }
 
     protected updateView()
