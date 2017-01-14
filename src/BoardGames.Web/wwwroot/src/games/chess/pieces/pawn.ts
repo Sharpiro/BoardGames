@@ -1,14 +1,22 @@
-﻿class Pawn extends PlayerSquare
+﻿/// <reference path="./ChessSquare"/>
+
+class Pawn extends ChessSquare
 {
-    constructor(private icon: HTMLImageElement, gridX: number, gridY: number, owner: Owner)
+    constructor(gameBoard: GameBoard<ChessSquare>, private icon: HTMLImageElement, gridX: number, gridY: number, owner: Owner)
     {
-        super(gridX, gridY, owner, true);
+        super(gameBoard, gridX, gridY, owner, true);
     }
 
-    public render(window: GameWindow): void
+    public getAvailableMoves(): ChessSquare[]
     {
-        //const color = this.owner === Owner.Player ? "black" : "red";
+        var x = <ChessSquare>this.gameBoard.getSquare(this.gridX, this.gridY + 1);
+        return [x];
+    }
+
+    public render(): void
+    {
         if (!this.isActive()) return;
-        window.drawImage(this.icon, this.GridX, this.GridY, this.icon.width, this.icon.height);
+        var coordinates = gameBoard.GetSquareCoordinates(this);
+        this.gameBoard.gameWindow.drawImage(this.icon, coordinates.x, coordinates.y, this.icon.width, this.icon.height);
     }
 }

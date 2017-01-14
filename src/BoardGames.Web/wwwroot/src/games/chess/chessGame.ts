@@ -1,10 +1,11 @@
 /// <reference path="../../core/game"/>
 /// <reference path="../../core/GameWindow"/>
+/// <reference path="../../core/RenderableSquare"/>
 /// <reference path="./pieces/Pawn"/>
 
 class ChessGame extends Game
 {
-    constructor(protected gameBoard: GameBoard)
+    constructor(protected gameBoard: ChessBoard)
     {
         super(gameBoard);
         Game.state = GAME_STATE.AwaitingPlayerInput;
@@ -32,12 +33,14 @@ class ChessGame extends Game
 
     protected update()
     {
-        this.checkSquares();
+        this.checkHoveredAvailableMoves();
     }
 
-    private checkSquares()
+    private checkHoveredAvailableMoves()
     {
-        var squares = this.gameBoard.getSquares();
+        var squares = this.gameBoard.hoveredSquare.getAvailableMoves();
+        this.gameBoard.deactivateEmpty();
+        this.gameBoard.activateSquares(squares);
     }
 
     protected updateInput()

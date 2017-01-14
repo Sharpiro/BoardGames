@@ -1,32 +1,39 @@
-﻿/// <reference path="../../src/core/BoardSquare.ts"/>
-/// <reference path="../../src/core/PlayerSquare.ts"/>
+﻿/// <reference path="../../src/core/RenderableSquare"/>
+/// <reference path="../../src/core/OwnableSquare"/>
 
-class GameBoard
+class GameBoard<T extends RenderableSquare>
 {
     public segmentsX: number;
     public segmentsY: number;
     public xInterval: number;
     public yInterval: number;
-    public squares = [] as BoardSquare[];
-    public activationOrder = [] as BoardSquare[];
-    public hoveredSquare: BoardSquare;
-    public clickedSquare: BoardSquare;
+    public squares = [] as T[];
+    public activationOrder = [] as T[];
+    public hoveredSquare: T;
+    public clickedSquare: T;
 
-    constructor(segmentsX: number, segmentsY: number, protected gameWindow: GameWindow)
+    constructor(segmentsX: number, segmentsY: number, public gameWindow: GameWindow)
     {
         this.segmentsX = segmentsX;
         this.segmentsY = segmentsY;
         this.xInterval = gameWindow.width / segmentsX;
         this.yInterval = gameWindow.height / segmentsY;
+        this.gameWindow.registerEvent("mousemove", this.baseOnMouseMove);
         this.gameWindow.registerEvent("contextmenu", (e: MouseEvent) => e.preventDefault());
-        this.hoveredSquare = new PlayerSquare(0, 0, Owner.Empty, true);
+        this.hoveredSquare = <T><RenderableSquare>new EmptyChessSquare(this, 0, 0);
         for (let i = 0; i < segmentsY; i++) 
         {
             for (let j = 0; j < segmentsX; j++)
             {
-                this.squares.push(new PlayerSquare(j + 1, i + 1));
+                this.squares.push(<T><RenderableSquare>new OwnableSquare(this, j + 1, i + 1));
             }
         }
+    }
+
+    private baseOnMouseMove = (e: MouseEvent): void =>
+    {
+        var gridPosition = this.getGridPosition(e.clientX, e.clientY);
+        this.hoveredSquare = <T>this.getSquare(gridPosition.x, gridPosition.y);
     }
 
     public render(): void
@@ -48,7 +55,7 @@ class GameBoard
 
         for (var square of this.squares)
         {
-            square.render(this.gameWindow);
+            square.render();
         }
     }
 
@@ -62,32 +69,46 @@ class GameBoard
         return new Point(xGridBlock, yGridBlock);
     }
 
-    public GetSquareCoordinates(square: BoardSquare): Point
+    public GetSquareCoordinates(square: RenderableSquare): Point
     {
-        var xCoord = square.GridX * this.xInterval - this.xInterval;
-        var yCoord = square.GridY * this.yInterval - this.yInterval;
+        var xCoord = square.gridX * this.xInterval - this.xInterval;
+        var yCoord = square.gridY * this.yInterval - this.yInterval;
         return new Point(xCoord, yCoord);
     }
 
-    public getSquares(): Array<BoardSquare>
+    public getSquares(): Array<T>
     {
-        return this.squares.slice();
+        return <Array<T>>this.squares.slice();
     }
 
-    public getSquare(gridX: number, gridY: number): BoardSquare
+    public getSquare(gridX: number, gridY: number): T
     {
         const arrayPos = (gridY - 1) * this.segmentsX + gridX - 1;
-        return this.squares[arrayPos];
+        return <T>this.squares[arrayPos];
     }
 
-    public setSquare(square: BoardSquare): void
+    public setSquare(square: T): void
     {
-        const arrayPos = (square.GridY - 1) * this.segmentsX + square.GridX - 1;
+        const arrayPos = (square.gridY - 1) * this.segmentsX + square.gridX - 1;
         this.squares[arrayPos] = square;
         this.activationOrder.push(square);
     }
 
-    public setSquares(squares: BoardSquare[]): void
+    public setSquares(squares: T[]): void
+    {
+        squares.forEach(value => this.setSquare(value));
+    }
+
+    public activateSquares(squares: T[]): void
+    {
+        //squares.forEach(value => this.activateSquare(value));
+        for (var square of squares)
+        {
+            square.activate();
+        }
+    }
+
+    public initializeSquares(squares: T[]): void
     {
         this.squares = squares;
         this.activationOrder = [];

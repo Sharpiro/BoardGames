@@ -8,7 +8,7 @@ abstract class Game
     protected startTime: number;
     protected nowTime: number;
 
-    constructor(protected gameBoard: GameBoard)
+    constructor(protected gameBoard: GameBoard<RenderableSquare>)
     {
         this.inputHandler = new InputHandler();
         Game.state = GAME_STATE.AwaitingPlayerInput;
