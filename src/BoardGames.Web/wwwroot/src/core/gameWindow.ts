@@ -74,7 +74,7 @@
     public drawSkinnyGridBox(x: number, y: number, width: number, height: number, color = "grey", isFillable = true): void
     {
         if (isFillable)
-            this.fillRect(x, y, width, height);
+            this.fillRect(x, y, width, height, color);
         //this.fillRect((x * width) - width + 1, (y * height - height + (height / 4.0)) + 1, width - 2, height / 2 - 2, color);
         else
             this.strokeRect((x * width) - width + 1, (y * height - height + (height / 4.0)) + 1, width - 2, height / 2 - 2, color);

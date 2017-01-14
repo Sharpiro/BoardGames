@@ -1,22 +1,16 @@
 ﻿/// <reference path="./ChessSquare"/>
 
-class Pawn extends ChessSquare
+class Pawn extends ChessPiece
 {
-    constructor(gameBoard: GameBoard<ChessSquare>, private icon: HTMLImageElement, gridX: number, gridY: number, owner: Owner)
+    constructor(gameBoard: GameBoard<ChessSquare>, icon: HTMLImageElement, gridX: number, gridY: number, owner: Owner)
     {
-        super(gameBoard, gridX, gridY, owner, true);
+        super(gameBoard, icon, gridX, gridY, owner);
     }
 
     public getAvailableMoves(): ChessSquare[]
     {
-        var x = <ChessSquare>this.gameBoard.getSquare(this.gridX, this.gridY + 1);
-        return [x];
-    }
-
-    public render(): void
-    {
-        if (!this.isActive()) return;
-        var coordinates = gameBoard.GetSquareCoordinates(this);
-        this.gameBoard.gameWindow.drawImage(this.icon, coordinates.x, coordinates.y, this.icon.width, this.icon.height);
+        var above = <ChessSquare>this.gameBoard.getSquare(this.gridX, this.gridY + 1);
+        var below = <ChessSquare>this.gameBoard.getSquare(this.gridX, this.gridY - 1);
+        return [above, below].filter(s => s !== undefined);
     }
 }

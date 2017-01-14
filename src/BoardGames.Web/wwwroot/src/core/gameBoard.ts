@@ -41,7 +41,7 @@ class GameBoard<T extends RenderableSquare>
         this.gameWindow.clearScreen();
         if (Game.state === GAME_STATE.AwaitingPlayerInput)
             var hoveredCoords = this.GetSquareCoordinates(this.hoveredSquare);
-        this.gameWindow.drawSkinnyGridBox(hoveredCoords.x, hoveredCoords.y, this.xInterval, this.yInterval);
+        this.gameWindow.drawSkinnyGridBox(hoveredCoords.x, hoveredCoords.y, this.xInterval, this.yInterval, "orange");
 
         for (let i = 1; i < this.segmentsX; i++)
         {
@@ -83,6 +83,8 @@ class GameBoard<T extends RenderableSquare>
 
     public getSquare(gridX: number, gridY: number): T
     {
+        if (gridX > this.segmentsX || gridY > this.segmentsY) return undefined;
+        if (gridX < 1|| gridY < 1) return undefined;
         const arrayPos = (gridY - 1) * this.segmentsX + gridX - 1;
         return <T>this.squares[arrayPos];
     }
@@ -97,15 +99,6 @@ class GameBoard<T extends RenderableSquare>
     public setSquares(squares: T[]): void
     {
         squares.forEach(value => this.setSquare(value));
-    }
-
-    public activateSquares(squares: T[]): void
-    {
-        //squares.forEach(value => this.activateSquare(value));
-        for (var square of squares)
-        {
-            square.activate();
-        }
     }
 
     public initializeSquares(squares: T[]): void

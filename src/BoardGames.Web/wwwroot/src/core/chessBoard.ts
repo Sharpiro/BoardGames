@@ -16,14 +16,19 @@ class ChessBoard extends GameBoard<ChessSquare>
         this.initializeSquares(squares);
     }
 
-    public deactivateEmpty()
+    public deHighlightSquares()
     {
         for (var square of this.squares)
         {
-            //console.log(square instanceof EmptyChessSquare);
-            if (!(square instanceof EmptyChessSquare)) continue;
-            square.deActivate();
-            //console.log(square);
+            square.deHighlight();
+        }
+    }
+
+    public highlightSquares(squares: ChessSquare[])
+    {
+        for (var square of squares)
+        {
+            square.highlight();
         }
     }
 

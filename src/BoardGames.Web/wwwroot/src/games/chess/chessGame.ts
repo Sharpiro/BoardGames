@@ -39,8 +39,8 @@ class ChessGame extends Game
     private checkHoveredAvailableMoves()
     {
         var squares = this.gameBoard.hoveredSquare.getAvailableMoves();
-        this.gameBoard.deactivateEmpty();
-        this.gameBoard.activateSquares(squares);
+        this.gameBoard.deHighlightSquares();
+        this.gameBoard.highlightSquares(squares);
     }
 
     protected updateInput()
