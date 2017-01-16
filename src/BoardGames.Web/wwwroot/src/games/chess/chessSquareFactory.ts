@@ -1,6 +1,8 @@
 ﻿/// <reference path="./pieces/Rook"/>
 /// <reference path="./pieces/Knight"/>
 /// <reference path="./pieces/Bishop"/>
+/// <reference path="./pieces/Queen"/>
+/// <reference path="./pieces/King"/>
 
 class ChessSquareFactory
 {
@@ -51,13 +53,13 @@ class ChessSquareFactory
         let pieces: ChessSquare[] = [
             //white misc
             new Rook(gameBoard, whiteRookIcon, 1, 1, Owner.Player),
-            new Knight(gameBoard, whiteKnightIcon, 4, 4, Owner.Player),
+            new Knight(gameBoard, whiteKnightIcon, 2, 1, Owner.Player),
             new Bishop(gameBoard, whiteBishopIcon, 3, 1, Owner.Player),
-            new Pawn(gameBoard, whiteKingIcon, 4, 1, Owner.Player),
-            new Pawn(gameBoard, whiteQueenIcon, 5, 1, Owner.Player),
+            new King(gameBoard, whiteKingIcon, 5, 4, Owner.Player),
+            new Queen(gameBoard, whiteQueenIcon, 4, 4, Owner.Player),
             new Bishop(gameBoard, whiteBishopIcon, 6, 1, Owner.Player),
             new Knight(gameBoard, whiteKnightIcon, 7, 1, Owner.Player),
-            new Rook(gameBoard, whiteRookIcon, 8, 1, Owner.Player),
+            new Rook(gameBoard, whiteRookIcon, 8, 4, Owner.Player),
 
             //white pawns
             new Pawn(gameBoard, whitePawnIcon, 1, 2, Owner.Player),
@@ -65,9 +67,9 @@ class ChessSquareFactory
             new Pawn(gameBoard, whitePawnIcon, 3, 2, Owner.Player),
             new Pawn(gameBoard, whitePawnIcon, 4, 2, Owner.Player),
             new Pawn(gameBoard, whitePawnIcon, 5, 2, Owner.Player),
-            new Pawn(gameBoard, whitePawnIcon, 6, 2, Owner.Player),
+            new Pawn(gameBoard, whitePawnIcon, 6, 3, Owner.Player),
             new Pawn(gameBoard, whitePawnIcon, 7, 2, Owner.Player),
-            new Pawn(gameBoard, whitePawnIcon, 8, 2, Owner.Player),
+            new Pawn(gameBoard, whitePawnIcon, 7, 3, Owner.Player),
 
             //black pawns
             new Pawn(gameBoard, blackPawnIcon, 1, 7, Owner.Computer),
@@ -76,18 +78,18 @@ class ChessSquareFactory
             new Pawn(gameBoard, blackPawnIcon, 4, 7, Owner.Computer),
             new Pawn(gameBoard, blackPawnIcon, 5, 7, Owner.Computer),
             new Pawn(gameBoard, blackPawnIcon, 6, 7, Owner.Computer),
-            new Pawn(gameBoard, blackPawnIcon, 7, 7, Owner.Computer),
+            new Pawn(gameBoard, blackPawnIcon, 7, 4, Owner.Computer),
             new Pawn(gameBoard, blackPawnIcon, 8, 7, Owner.Computer),
 
             //black misc
-            new Rook(gameBoard, blackRookIcon, 1, 8, Owner.Player),
-            new Knight(gameBoard, blackKnightIcon, 2, 8, Owner.Player),
-            new Bishop(gameBoard, blackBishopIcon, 3, 8, Owner.Player),
-            new Pawn(gameBoard, blackKingIcon, 4, 8, Owner.Player),
-            new Pawn(gameBoard, blackQueenIcon, 5, 8, Owner.Player),
-            new Bishop(gameBoard, blackBishopIcon, 6, 8, Owner.Player),
-            new Knight(gameBoard, blackKnightIcon, 7, 8, Owner.Player),
-            new Rook(gameBoard, blackRookIcon, 8, 8, Owner.Player),
+            new Rook(gameBoard, blackRookIcon, 1, 8, Owner.Computer),
+            new Knight(gameBoard, blackKnightIcon, 2, 8, Owner.Computer),
+            new Bishop(gameBoard, blackBishopIcon, 3, 8, Owner.Computer),
+            new King(gameBoard, blackKingIcon, 4, 8, Owner.Computer),
+            new Queen(gameBoard, blackQueenIcon, 5, 8, Owner.Computer),
+            new Bishop(gameBoard, blackBishopIcon, 6, 8, Owner.Computer),
+            new Knight(gameBoard, blackKnightIcon, 7, 8, Owner.Computer),
+            new Rook(gameBoard, blackRookIcon, 8, 8, Owner.Computer),
         ];
 
         let allSquares: ChessSquare[] = [];

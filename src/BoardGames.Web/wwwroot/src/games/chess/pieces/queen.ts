@@ -1,6 +1,6 @@
 ﻿/// <reference path="./ChessSquare"/>
 
-class Rook extends ChessPiece
+class Queen extends ChessPiece
 {
     constructor(gameBoard: GameBoard<ChessSquare>, icon: HTMLImageElement, gridX: number, gridY: number, owner: Owner)
     {
@@ -10,6 +10,10 @@ class Rook extends ChessPiece
     public getAvailableMoves(): ChessSquare[]
     {
         let modifiers = [
+            (p: Point) => new Point(++p.x, ++p.y),
+            (p: Point) => new Point(--p.x, ++p.y),
+            (p: Point) => new Point(++p.x, --p.y),
+            (p: Point) => new Point(--p.x, --p.y),
             (p: Point) => new Point(++p.x, p.y),
             (p: Point) => new Point(p.x, ++p.y),
             (p: Point) => new Point(--p.x, p.y),

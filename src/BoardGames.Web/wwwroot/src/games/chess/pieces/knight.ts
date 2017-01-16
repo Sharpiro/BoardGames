@@ -19,7 +19,8 @@ class Knight extends ChessPiece
             <ChessSquare>this.gameBoard.getSquare(this.gridX - 1, this.gridY + 2),
             <ChessSquare>this.gameBoard.getSquare(this.gridX - 2, this.gridY + 1),
         ]
+        moves = this.filterInvalid(moves);
 
-        return moves.filter(s => s !== undefined);
+        return moves;
     }
 }

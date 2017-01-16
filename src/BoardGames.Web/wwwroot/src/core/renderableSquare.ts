@@ -12,7 +12,4 @@
         if (otherSquare == undefined) return false;
         return this.gridX == otherSquare.gridX && this.gridY == otherSquare.gridY;
     }
-    //public abstract isActive(): boolean;
-    //public abstract activate(): void;
-    //public abstract deActivate(): void;
 }

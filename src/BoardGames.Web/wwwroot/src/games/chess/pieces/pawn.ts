@@ -10,7 +10,21 @@ class Pawn extends ChessPiece
     public getAvailableMoves(): ChessSquare[]
     {
         var above = <ChessSquare>this.gameBoard.getSquare(this.gridX, this.gridY + 1);
+        above = above.owner !== this.owner && above.owner !== Owner.Empty ? undefined : above;
         var below = <ChessSquare>this.gameBoard.getSquare(this.gridX, this.gridY - 1);
-        return [above, below].filter(s => s !== undefined);
+        below = below.owner !== this.owner && below.owner !== Owner.Empty ? undefined : below;
+
+        let modifiers = [
+            (p: Point) => new Point(++p.x, ++p.y),
+            (p: Point) => new Point(--p.x, ++p.y),
+            (p: Point) => new Point(++p.x, --p.y),
+            (p: Point) => new Point(--p.x, --p.y)
+        ];
+        let diagonals = this.getSquareSequences(modifiers, 1).filter(s => s.owner !== this.owner && s.owner !== Owner.Empty);
+
+        var x = [above, below].concat(diagonals);
+
+        var squares = this.filterInvalid(x);
+        return squares;
     }
 }

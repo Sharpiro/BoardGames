@@ -16,7 +16,8 @@ class Bishop extends ChessPiece
             (p: Point) => new Point(--p.x, --p.y)
         ];
         let moves = this.getSquareSequences(modifiers);
+        moves = this.filterInvalid(moves);
 
-        return moves.filter(s => s !== undefined);
+        return moves;
     }
 }
