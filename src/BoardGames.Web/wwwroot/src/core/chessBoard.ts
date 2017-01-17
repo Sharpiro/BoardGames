@@ -9,11 +9,60 @@ class ChessBoard extends GameBoard<ChessSquare>
     {
         super(segmentsX, segmentsY, gameWindow);
         this.gameWindow.registerEvent("mousemove", this.onMouseMove);
-        this.gameWindow.registerEvent("mousedown", this.onMouseDown);
         this.gameWindow.registerEvent("contextmenu", (e: MouseEvent) => e.preventDefault());
         this.hoveredSquare = new EmptyChessSquare(this, 0, 0);
         const squares = ChessSquareFactory.getSquares(this, this.segmentsX, this.segmentsY, this.xInterval, this.yInterval);
         this.initializeSquares(squares);
+    }
+
+    public swapSquares(source: ChessSquare, destination: ChessSquare, callback: () => void = null): void
+    {
+        var shortestPathSquares = this.shortestPath(source, destination);
+
+        this.swapSquare(source, destination);
+        //callback();
+        //callback = () =>
+        //{
+        //    callback();
+        //};
+        shortestPathSquares.forEach((square, index) =>
+        {
+            setTimeout(() =>
+            {
+                let lastItemCallback = index + 1 === shortestPathSquares.length ? callback : null;
+                this.swapSquareGraphics(source, square, lastItemCallback);
+            }, 200 * index);
+        });
+    }
+
+    public swapSquareGraphics(source: ChessSquare, destination: ChessSquare, callback: () => void = null): void
+    {
+        if (source === undefined || destination === undefined) throw "error swapping squares, 1 was undefined";
+        if (source.equals(destination)) throw "cannot swap, source and destination are the same";
+        if (source.owner !== destination.owner && destination.owner !== Owner.Empty)
+            destination = new EmptyChessSquare(this, destination.gridX, destination.gridY);
+
+        var tempPosition = source.getGridPosition();
+        source.setGridPosition(destination.getGridPosition());
+        destination.setGridPosition(tempPosition);
+
+        if (callback) callback();
+    }
+
+    public swapSquare(source: ChessSquare, destination: ChessSquare): void
+    {
+        if (source === undefined || destination === undefined) throw "error swapping squares, 1 was undefined";
+        if (source.equals(destination)) throw "cannot swap, source and destination are the same";
+        if (source.owner !== destination.owner && destination.owner !== Owner.Empty)
+            destination = new EmptyChessSquare(this, destination.gridX, destination.gridY);
+
+        this.squares[source.getArrayPosition()] = destination;
+        this.squares[destination.getArrayPosition()] = source;
+
+        //var tempPosition = source.getGridPosition();
+        //source.setGridPosition(destination.getGridPosition());
+        //destination.setGridPosition(tempPosition);
+
     }
 
     public deHighlightSquares()
@@ -30,10 +79,6 @@ class ChessBoard extends GameBoard<ChessSquare>
         {
             square.highlight();
         }
-    }
-
-    private onMouseDown = (e: MouseEvent): void =>
-    {
     }
 
     private onMouseMove = (e: MouseEvent): void =>

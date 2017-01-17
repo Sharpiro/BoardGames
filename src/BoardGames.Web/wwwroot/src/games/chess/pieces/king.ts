@@ -4,7 +4,8 @@ class King extends ChessPiece
 {
     constructor(gameBoard: GameBoard<ChessSquare>, icon: HTMLImageElement, gridX: number, gridY: number, owner: Owner)
     {
-        super(gameBoard, icon, gridX, gridY, owner);
+        super(gameBoard, icon, gridX, gridY, owner, ChessSquareType.King);
+        this.squreType = ChessSquareType.King;
     }
 
     public getAvailableMoves(): ChessSquare[]

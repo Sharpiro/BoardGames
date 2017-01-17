@@ -20,7 +20,6 @@ class GameBoard<T extends RenderableSquare>
         this.yInterval = gameWindow.height / segmentsY;
         this.gameWindow.registerEvent("mousemove", this.baseOnMouseMove);
         this.gameWindow.registerEvent("contextmenu", (e: MouseEvent) => e.preventDefault());
-        this.hoveredSquare = <T><RenderableSquare>new EmptyChessSquare(this, 0, 0);
         for (let i = 0; i < segmentsY; i++) 
         {
             for (let j = 0; j < segmentsX; j++)
@@ -36,11 +35,50 @@ class GameBoard<T extends RenderableSquare>
         this.hoveredSquare = <T>this.getSquare(gridPosition.x, gridPosition.y);
     }
 
+    public shortestPath(source: T, destination: T): T[]
+    {
+        let deltaX = destination.gridX - source.gridX;
+        let deltaY = destination.gridY - source.gridY;
+        let absDeltaX = Math.abs(deltaX);
+        let absDeltaY = Math.abs(deltaY);
+        let xIsNegative = deltaX < 0 ? true : false;
+        let yIsNegative = deltaY < 0 ? true : false;
+        let squares: T[] = [];
+        let xArray: number[] = [];
+        let yArray: number[] = [];
+        for (let i = 1; i <= absDeltaX; i++)
+        {
+            let x = xIsNegative ? source.gridX - i : source.gridX + i;
+            xArray.push(x);
+        }
+
+        for (let i = 1; i <= absDeltaY; i++)
+        {
+            let y = yIsNegative ? source.gridY - i : source.gridY + i;
+            yArray.push(y);
+        }
+
+        for (let i = 0; i < Math.max(absDeltaX, absDeltaY); i++)
+        {
+            let x = xArray[i] === undefined ? destination.gridX : xArray[i];
+            let y = yArray[i] === undefined ? destination.gridY : yArray[i];
+            let square = this.getSquare(x, y);
+            squares.push(square);
+        }
+
+        var obj = squares.map(s => { return { x: s.gridX, y: s.gridY } });
+        obj.forEach(s => console.log(s));
+        //console.log(obj);
+        //console.log(squares);
+        //console.log(xArray);
+        //console.log(yArray);
+        return squares;
+    }
+
     public render(): void
     {
         this.gameWindow.clearScreen();
-        if (Game.state === GAME_STATE.AwaitingPlayerInput)
-            var hoveredCoords = this.GetSquareCoordinates(this.hoveredSquare);
+        let hoveredCoords = this.hoveredSquare.getPixelCoordinates();
         this.gameWindow.drawSkinnyGridBox(hoveredCoords.x, hoveredCoords.y, this.xInterval, this.yInterval, "orange");
 
         for (let i = 1; i < this.segmentsX; i++)
@@ -59,7 +97,7 @@ class GameBoard<T extends RenderableSquare>
         }
     }
 
-    protected getGridPosition(clientX: number, clientY: number): Point
+    public getGridPosition(clientX: number, clientY: number): Point
     {
         const offset = this.gameWindow.getBoundingClientRect();
         const mouseX = clientX - offset.left;
@@ -67,13 +105,6 @@ class GameBoard<T extends RenderableSquare>
         const xGridBlock = Math.floor(mouseX / this.xInterval) + 1;
         const yGridBlock = Math.floor(mouseY / this.yInterval) + 1;
         return new Point(xGridBlock, yGridBlock);
-    }
-
-    public GetSquareCoordinates(square: RenderableSquare): Point
-    {
-        var xCoord = square.gridX * this.xInterval - this.xInterval;
-        var yCoord = square.gridY * this.yInterval - this.yInterval;
-        return new Point(xCoord, yCoord);
     }
 
     public getSquares(): Array<T>
@@ -84,7 +115,7 @@ class GameBoard<T extends RenderableSquare>
     public getSquare(gridX: number, gridY: number): T
     {
         if (gridX > this.segmentsX || gridY > this.segmentsY) return undefined;
-        if (gridX < 1|| gridY < 1) return undefined;
+        if (gridX < 1 || gridY < 1) return undefined;
         const arrayPos = (gridY - 1) * this.segmentsX + gridX - 1;
         return <T>this.squares[arrayPos];
     }
