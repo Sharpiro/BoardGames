@@ -18,7 +18,8 @@ abstract class Game
 
     protected updateView(stateName: string)
     {
-        $("#gameState").text(stateName);
+        document.getElementById("gameState").innerText = stateName;
+        // $("#gameState").text(stateName);
     }
 
     protected abstract update(): void;

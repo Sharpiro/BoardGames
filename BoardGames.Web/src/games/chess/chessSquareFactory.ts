@@ -6,19 +6,19 @@
 
 class ChessSquareFactory
 {
-    private static whiteRookSrc = "/content/pieces/whiteRook.png";
-    private static whiteKnightSrc = "/content/pieces/whiteKnight.png";
-    private static whiteBishopSrc = "/content/pieces/WhiteBishop.png";
-    private static whiteKingSrc = "/content/pieces/whiteKing.png";
-    private static whiteQueenSrc = "/content/pieces/WhiteQueen.png";
-    private static whitePawnSrc = "/content/pieces/WhitePawn.png";
+    private static whiteRookSrc = "./content/pieces/whiteRook.png";
+    private static whiteKnightSrc = "./content/pieces/whiteKnight.png";
+    private static whiteBishopSrc = "./content/pieces/WhiteBishop.png";
+    private static whiteKingSrc = "./content/pieces/whiteKing.png";
+    private static whiteQueenSrc = "./content/pieces/WhiteQueen.png";
+    private static whitePawnSrc = "./content/pieces/WhitePawn.png";
 
-    private static blackRookSrc = "/content/pieces/BlackRook.png";
-    private static blackKnightSrc = "/content/pieces/BlackKnight.png";
-    private static blackBishopSrc = "/content/pieces/blackBishop.png";
-    private static blackKingSrc = "/content/pieces/BlackKing.png";
-    private static blackQueenSrc = "/content/pieces/blackQueen.png";
-    private static blackPawnSrc = "/content/pieces/blackPawn.png";
+    private static blackRookSrc = "./content/pieces/BlackRook.png";
+    private static blackKnightSrc = "./content/pieces/BlackKnight.png";
+    private static blackBishopSrc = "./content/pieces/blackBishop.png";
+    private static blackKingSrc = "./content/pieces/BlackKing.png";
+    private static blackQueenSrc = "./content/pieces/blackQueen.png";
+    private static blackPawnSrc = "./content/pieces/blackPawn.png";
 
     public static getSquares(gameBoard: GameBoard<ChessSquare>, squaresX: number, squaresY: number, squareWidth: number, squareHeight: number): ChessSquare[]
     {
