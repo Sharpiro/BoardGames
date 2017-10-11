@@ -1,13 +1,9 @@
-﻿class Point
-{
-    constructor(public x: number, public y: number)
-    {
+﻿export class Point {
+    constructor(public x: number, public y: number) {
     }
 
-    public equals(otherPoint: Point): boolean
-    {
-        if (this.x === otherPoint.x && this.y === otherPoint.y)
-        {
+    public equals(otherPoint: Point): boolean {
+        if (this.x === otherPoint.x && this.y === otherPoint.y) {
             return true;
         }
         return false;

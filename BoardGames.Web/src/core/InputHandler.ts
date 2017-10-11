@@ -1,17 +1,16 @@
-﻿class InputHandler
-{
+﻿import { Point } from "./point";
+
+export class InputHandler {
     //public isPlayerTurn: boolean;
     //public static buttonClicked = false;
     //public static acceptingInput = true;
 
-    constructor()
-    {
+    constructor() {
         //this.isPlayerTurn = true;
     }
 
-    public update(clickedBlocks: Point[]): void
-    {
-        
+    public update(clickedBlocks: Point[]): void {
+
     }
 
     //public update(): void

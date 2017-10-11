@@ -1,12 +1,12 @@
-﻿/// <reference path="../../src/core/RenderableSquare"/>
-/// <reference path="../../src/core/OwnableSquare"/>
-/// <reference path="./GameBoard"/>
-/// <reference path="../../src/games/chess/ChessSquareFactory"/>
+﻿import { GameBoard } from "./gameBoard";
+import { GameWindow } from "./gameWindow";
+import { ChessSquareFactory } from "../games/chess/chessSquareFactory";
+import { ChessSquare, EmptyChessSquare } from "../games/chess/pieces/chessSquare";
+import { Owner } from "./ownableSquare";
 
-class ChessBoard extends GameBoard<ChessSquare>
+export class ChessBoard extends GameBoard<ChessSquare>
 {
-    constructor(segmentsX: number, segmentsY: number, gameWindow: GameWindow)
-    {
+    constructor(segmentsX: number, segmentsY: number, gameWindow: GameWindow) {
         super(segmentsX, segmentsY, gameWindow);
         this.gameWindow.registerEvent("mousemove", this.onMouseMove);
         this.gameWindow.registerEvent("contextmenu", (e: MouseEvent) => e.preventDefault());
@@ -15,8 +15,7 @@ class ChessBoard extends GameBoard<ChessSquare>
         this.initializeSquares(squares);
     }
 
-    public swapSquares(source: ChessSquare, destination: ChessSquare, callback: () => void = null): void
-    {
+    public swapSquares(source: ChessSquare, destination: ChessSquare, callback: () => void = null): void {
         var shortestPathSquares = this.shortestPath(source, destination);
 
         this.swapSquare(source, destination);
@@ -25,18 +24,15 @@ class ChessBoard extends GameBoard<ChessSquare>
         //{
         //    callback();
         //};
-        shortestPathSquares.forEach((square, index) =>
-        {
-            setTimeout(() =>
-            {
+        shortestPathSquares.forEach((square, index) => {
+            setTimeout(() => {
                 let lastItemCallback = index + 1 === shortestPathSquares.length ? callback : null;
                 this.swapSquareGraphics(source, square, lastItemCallback);
             }, 200 * index);
         });
     }
 
-    public swapSquareGraphics(source: ChessSquare, destination: ChessSquare, callback: () => void = null): void
-    {
+    public swapSquareGraphics(source: ChessSquare, destination: ChessSquare, callback: () => void = null): void {
         if (source === undefined || destination === undefined) throw "error swapping squares, 1 was undefined";
         if (source.equals(destination)) throw "cannot swap, source and destination are the same";
         if (source.owner !== destination.owner && destination.owner !== Owner.Empty)
@@ -49,8 +45,7 @@ class ChessBoard extends GameBoard<ChessSquare>
         if (callback) callback();
     }
 
-    public swapSquare(source: ChessSquare, destination: ChessSquare): void
-    {
+    public swapSquare(source: ChessSquare, destination: ChessSquare): void {
         if (source === undefined || destination === undefined) throw "error swapping squares, 1 was undefined";
         if (source.equals(destination)) throw "cannot swap, source and destination are the same";
         if (source.owner !== destination.owner && destination.owner !== Owner.Empty)
@@ -65,28 +60,22 @@ class ChessBoard extends GameBoard<ChessSquare>
 
     }
 
-    public deHighlightSquares()
-    {
-        for (var square of this.squares)
-        {
+    public deHighlightSquares() {
+        for (var square of this.squares) {
             square.deHighlight();
         }
     }
 
-    public highlightSquares(squares: ChessSquare[])
-    {
-        for (var square of squares)
-        {
+    public highlightSquares(squares: ChessSquare[]) {
+        for (var square of squares) {
             square.highlight();
         }
     }
 
-    private onMouseMove = (e: MouseEvent): void =>
-    {
+    private onMouseMove = (e: MouseEvent): void => {
     }
 
-    public render(): void
-    {
+    public render(): void {
         super.render();
     }
 }

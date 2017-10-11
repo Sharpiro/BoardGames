@@ -1,6 +1,4 @@
-﻿///// <reference path="../../core/RenderableSquare"/>
-
-//abstract class LogicSquare extends RenderableSquare
+﻿//abstract class LogicSquare extends RenderableSquare
 //{
 //    public type: LogicSquareType
 //    private _isActive = false;

@@ -1,8 +1,3 @@
-///// <reference path="../../core/game"/>
-///// <reference path="./booleanSquare"/>
-///// <reference path="../../core/GameWindow"/>
-///// <reference path="../../core/LogicBoard"/>
-
 //class LogicGame extends Game
 //{
 //    constructor(protected gameBoard: ILogicBoard)

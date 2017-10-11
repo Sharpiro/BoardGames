@@ -1,11 +1,14 @@
-﻿/// <reference path="./pieces/Rook"/>
-/// <reference path="./pieces/Knight"/>
-/// <reference path="./pieces/Bishop"/>
-/// <reference path="./pieces/Queen"/>
-/// <reference path="./pieces/King"/>
+﻿import { ChessSquare, EmptyChessSquare } from "./pieces/chessSquare";
+import { GameBoard } from "../../core/gameBoard";
+import { Rook } from "./pieces/rook";
+import { Knight } from "./pieces/knight";
+import { Bishop } from "./pieces/bishop";
+import { King } from "./pieces/king";
+import { Queen } from "./pieces/queen";
+import { Pawn } from "./pieces/pawn";
+import { Owner } from "../../core/ownableSquare";
 
-class ChessSquareFactory
-{
+export class ChessSquareFactory {
     private static whiteRookSrc = "./content/pieces/whiteRook.png";
     private static whiteKnightSrc = "./content/pieces/whiteKnight.png";
     private static whiteBishopSrc = "./content/pieces/WhiteBishop.png";
@@ -20,8 +23,7 @@ class ChessSquareFactory
     private static blackQueenSrc = "./content/pieces/blackQueen.png";
     private static blackPawnSrc = "./content/pieces/blackPawn.png";
 
-    public static getSquares(gameBoard: GameBoard<ChessSquare>, squaresX: number, squaresY: number, squareWidth: number, squareHeight: number): ChessSquare[]
-    {
+    public static getSquares(gameBoard: GameBoard<ChessSquare>, squaresX: number, squaresY: number, squareWidth: number, squareHeight: number): ChessSquare[] {
         //white icons
         const whiteRookIcon = new Image(squareWidth, squareHeight);
         whiteRookIcon.src = this.whiteRookSrc;
@@ -93,10 +95,8 @@ class ChessSquareFactory
         ];
 
         let allSquares: ChessSquare[] = [];
-        for (let i = 0; i < squaresY; i++) 
-        {
-            for (let j = 0; j < squaresX; j++)
-            {
+        for (let i = 0; i < squaresY; i++) {
+            for (let j = 0; j < squaresX; j++) {
                 let x = pieces.filter(s => s.gridX === j + 1 && s.gridY === i + 1)[0];
                 let y = x !== undefined ? x : new EmptyChessSquare(gameBoard, j + 1, i + 1);
                 allSquares.push(y);

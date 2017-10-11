@@ -1,14 +1,12 @@
 {
   "version": "1.0.0",
-  "name": "asp.net",
+  "name": "boardgames",
   "private": true,
-  "scripts": {
-    "postinstall": "typings install"
-  },
-  "dependencies": {
-    "jquery": "^3.0.0"
-  },
+  "scripts": {},
+  "dependencies": {},
   "devDependencies": {
-    "typings": "2.1.0"
+    "ts-loader": "^2.3.7",
+    "typescript": "^2.5.3",
+    "webpack": "^3.6.0"
   }
 }

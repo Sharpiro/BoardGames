@@ -1,7 +1,9 @@
-﻿/// <reference path="../../src/core/RenderableSquare"/>
-/// <reference path="../../src/core/OwnableSquare"/>
+﻿import { RenderableSquare } from "./renderableSquare";
+import { GameWindow } from "./gameWindow";
+import { OwnableSquare } from "./ownableSquare";
+import { Point } from "./point";
 
-class GameBoard<T extends RenderableSquare>
+export class GameBoard<T extends RenderableSquare>
 {
     public segmentsX: number;
     public segmentsY: number;
@@ -12,31 +14,26 @@ class GameBoard<T extends RenderableSquare>
     public hoveredSquare: T;
     public clickedSquare: T;
 
-    constructor(segmentsX: number, segmentsY: number, public gameWindow: GameWindow)
-    {
+    constructor(segmentsX: number, segmentsY: number, public gameWindow: GameWindow) {
         this.segmentsX = segmentsX;
         this.segmentsY = segmentsY;
         this.xInterval = gameWindow.width / segmentsX;
         this.yInterval = gameWindow.height / segmentsY;
         this.gameWindow.registerEvent("mousemove", this.baseOnMouseMove);
         this.gameWindow.registerEvent("contextmenu", (e: MouseEvent) => e.preventDefault());
-        for (let i = 0; i < segmentsY; i++) 
-        {
-            for (let j = 0; j < segmentsX; j++)
-            {
+        for (let i = 0; i < segmentsY; i++) {
+            for (let j = 0; j < segmentsX; j++) {
                 this.squares.push(<T><RenderableSquare>new OwnableSquare(this, j + 1, i + 1));
             }
         }
     }
 
-    private baseOnMouseMove = (e: MouseEvent): void =>
-    {
+    private baseOnMouseMove = (e: MouseEvent): void => {
         var gridPosition = this.getGridPosition(e.clientX, e.clientY);
         this.hoveredSquare = <T>this.getSquare(gridPosition.x, gridPosition.y);
     }
 
-    public shortestPath(source: T, destination: T): T[]
-    {
+    public shortestPath(source: T, destination: T): T[] {
         let deltaX = destination.gridX - source.gridX;
         let deltaY = destination.gridY - source.gridY;
         let absDeltaX = Math.abs(deltaX);
@@ -46,20 +43,17 @@ class GameBoard<T extends RenderableSquare>
         let squares: T[] = [];
         let xArray: number[] = [];
         let yArray: number[] = [];
-        for (let i = 1; i <= absDeltaX; i++)
-        {
+        for (let i = 1; i <= absDeltaX; i++) {
             let x = xIsNegative ? source.gridX - i : source.gridX + i;
             xArray.push(x);
         }
 
-        for (let i = 1; i <= absDeltaY; i++)
-        {
+        for (let i = 1; i <= absDeltaY; i++) {
             let y = yIsNegative ? source.gridY - i : source.gridY + i;
             yArray.push(y);
         }
 
-        for (let i = 0; i < Math.max(absDeltaX, absDeltaY); i++)
-        {
+        for (let i = 0; i < Math.max(absDeltaX, absDeltaY); i++) {
             let x = xArray[i] === undefined ? destination.gridX : xArray[i];
             let y = yArray[i] === undefined ? destination.gridY : yArray[i];
             let square = this.getSquare(x, y);
@@ -75,30 +69,25 @@ class GameBoard<T extends RenderableSquare>
         return squares;
     }
 
-    public render(): void
-    {
+    public render(): void {
         this.gameWindow.clearScreen();
         let hoveredCoords = this.hoveredSquare.getPixelCoordinates();
         this.gameWindow.drawSkinnyGridBox(hoveredCoords.x, hoveredCoords.y, this.xInterval, this.yInterval, "orange");
 
-        for (let i = 1; i < this.segmentsX; i++)
-        {
+        for (let i = 1; i < this.segmentsX; i++) {
             this.gameWindow.drawLine(i * this.xInterval, 0, i * this.xInterval, this.gameWindow.height);
         }
 
-        for (let i = 1; i < this.segmentsY; i++)
-        {
+        for (let i = 1; i < this.segmentsY; i++) {
             this.gameWindow.drawLine(0, i * this.yInterval, this.gameWindow.width, i * this.yInterval);
         }
 
-        for (var square of this.squares)
-        {
+        for (var square of this.squares) {
             square.render();
         }
     }
 
-    public getGridPosition(clientX: number, clientY: number): Point
-    {
+    public getGridPosition(clientX: number, clientY: number): Point {
         const offset = this.gameWindow.getBoundingClientRect();
         const mouseX = clientX - offset.left;
         const mouseY = clientY - offset.top;
@@ -107,33 +96,28 @@ class GameBoard<T extends RenderableSquare>
         return new Point(xGridBlock, yGridBlock);
     }
 
-    public getSquares(): Array<T>
-    {
+    public getSquares(): Array<T> {
         return <Array<T>>this.squares.slice();
     }
 
-    public getSquare(gridX: number, gridY: number): T
-    {
+    public getSquare(gridX: number, gridY: number): T {
         if (gridX > this.segmentsX || gridY > this.segmentsY) return undefined;
         if (gridX < 1 || gridY < 1) return undefined;
         const arrayPos = (gridY - 1) * this.segmentsX + gridX - 1;
         return <T>this.squares[arrayPos];
     }
 
-    public setSquare(square: T): void
-    {
+    public setSquare(square: T): void {
         const arrayPos = (square.gridY - 1) * this.segmentsX + square.gridX - 1;
         this.squares[arrayPos] = square;
         this.activationOrder.push(square);
     }
 
-    public setSquares(squares: T[]): void
-    {
+    public setSquares(squares: T[]): void {
         squares.forEach(value => this.setSquare(value));
     }
 
-    public initializeSquares(squares: T[]): void
-    {
+    public initializeSquares(squares: T[]): void {
         this.squares = squares;
         this.activationOrder = [];
     }

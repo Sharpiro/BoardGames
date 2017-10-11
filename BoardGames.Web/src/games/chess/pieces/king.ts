@@ -1,6 +1,10 @@
-﻿/// <reference path="./ChessSquare"/>
+﻿import { Point } from "../../../core/point";
+import { ChessSquare, ChessSquareType } from "./chessSquare";
+import { GameBoard } from "../../../core/gameBoard";
+import { ChessPiece } from "./chessPiece";
+import { Owner } from "../../../core/ownableSquare";
 
-class King extends ChessPiece
+export class King extends ChessPiece
 {
     constructor(gameBoard: GameBoard<ChessSquare>, icon: HTMLImageElement, gridX: number, gridY: number, owner: Owner)
     {

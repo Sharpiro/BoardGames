@@ -1,6 +1,4 @@
-﻿///// <reference path="./logicSquare"/>
-
-//class EmptySquare extends LogicSquare
+﻿//class EmptySquare extends LogicSquare
 //{
 //    constructor(gridX: number, gridY: number)
 //    {

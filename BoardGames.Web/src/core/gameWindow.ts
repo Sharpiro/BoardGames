@@ -1,10 +1,8 @@
-﻿class GameWindow
-{
+﻿export class GameWindow {
     public canvas: HTMLCanvasElement;
     public context: CanvasRenderingContext2D;
 
-    constructor(public width: number, public height: number)
-    {
+    constructor(public width: number, public height: number) {
         this.canvas = <HTMLCanvasElement>document.getElementById("canvas");
         this.canvas.width = width;
         this.canvas.height = height;
@@ -12,13 +10,11 @@
         this.context = this.canvas.getContext("2d");
     }
 
-    public getBoundingClientRect(): any
-    {
+    public getBoundingClientRect(): any {
         return this.canvas.getBoundingClientRect();
     }
 
-    public drawLine(x1: number, y1: number, x2: number, y2: number): void
-    {
+    public drawLine(x1: number, y1: number, x2: number, y2: number): void {
         this.context.strokeStyle = "black";
         this.context.beginPath();
         this.context.moveTo(x1, y1);
@@ -26,20 +22,17 @@
         this.context.stroke();
     }
 
-    public strokeRect(x: number, y: number, width: number, height: number, color: string = "black")
-    {
+    public strokeRect(x: number, y: number, width: number, height: number, color: string = "black") {
         this.context.strokeStyle = color;
         this.context.strokeRect(x, y, width, height);
     }
 
-    public fillRect(x: number, y: number, width: number, height: number, color: string = "black")
-    {
+    public fillRect(x: number, y: number, width: number, height: number, color: string = "black") {
         this.context.fillStyle = color;
         this.context.fillRect(x, y, width, height);
     }
 
-    public drawCircle(x: number, y: number, width: number, height: number, color: string = "grey")
-    {
+    public drawCircle(x: number, y: number, width: number, height: number, color: string = "grey") {
         this.context.fillStyle = color;
         this.context.beginPath();
         const radius = Math.min(width, height) / 2 - 1;
@@ -47,8 +40,7 @@
         this.context.fill();
     }
 
-    public drawCircleTop(x: number, y: number, width: number, height: number, color: string = "grey")
-    {
+    public drawCircleTop(x: number, y: number, width: number, height: number, color: string = "grey") {
         this.context.fillStyle = color;
         this.context.beginPath();
         const radius = Math.min(width, height) / 2 - 1;
@@ -56,23 +48,19 @@
         this.context.fill();
     }
 
-    public clearScreen()
-    {
+    public clearScreen() {
         this.context.clearRect(0, 0, this.width, this.height);
     }
 
-    public registerEvent(eventName: string, callback: (event: UIEvent) => void): void
-    {
+    public registerEvent(eventName: string, callback: (event: UIEvent) => void): void {
         this.canvas.addEventListener(eventName, callback, false);
     }
 
-    public drawImage(image: HTMLImageElement, xCoord: number, yCoord: number, width: number, height: number): void
-    {
+    public drawImage(image: HTMLImageElement, xCoord: number, yCoord: number, width: number, height: number): void {
         this.context.drawImage(image, xCoord, yCoord, width, height);
     }
 
-    public drawSkinnyGridBox(x: number, y: number, width: number, height: number, color = "grey", isFillable = true): void
-    {
+    public drawSkinnyGridBox(x: number, y: number, width: number, height: number, color = "grey", isFillable = true): void {
         if (isFillable)
             this.fillRect(x, y, width, height, color);
         //this.fillRect((x * width) - width + 1, (y * height - height + (height / 4.0)) + 1, width - 2, height / 2 - 2, color);

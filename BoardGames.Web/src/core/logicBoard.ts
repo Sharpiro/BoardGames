@@ -1,6 +1,4 @@
-﻿///// <reference path="../games/logicGates/logicSquare"/>
-
-//class LogicBoard implements IGameBoard
+﻿//class LogicBoard implements IGameBoard
 //{
 //    public segmentsX: number;
 //    public segmentsY: number;

@@ -1,8 +1,9 @@
-/// <reference path="../../core/game"/>
-/// <reference path="../../core/GameWindow"/>
-/// <reference path="../../core/RenderableSquare"/>
-/// <reference path="./pieces/Pawn"/>
-/// <reference path="./ShallowBlue"/>
+import { Game } from "../../core/game";
+import { ChessSquare, ChessSquareType } from "./pieces/chessSquare";
+import { ChessBoard } from "../../core/chessBoard";
+import { ShallowBlue } from "./shallowBlue";
+import { Owner } from "../../core/ownableSquare";
+import { GameWindow } from "../../core/gameWindow";
 
 class ChessGame extends Game
 {
