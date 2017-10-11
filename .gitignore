@@ -5,6 +5,7 @@
 *typings
 *appCombined.*
 *.map
+dist/bundle.js
 
 # User-specific files
 *.suo
