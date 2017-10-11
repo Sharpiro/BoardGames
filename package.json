@@ -2,7 +2,10 @@
   "version": "1.0.0",
   "name": "boardgames",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "watch": "./node_modules/.bin/webpack --watch",
+    "webpack": "./node_modules/.bin/webpack --watch"
+  },
   "dependencies": {},
   "devDependencies": {
     "ts-loader": "^2.3.7",
